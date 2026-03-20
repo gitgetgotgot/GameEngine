@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов\OpenGL Shaders">
+      <UniqueIdentifier>{9f53956d-f22c-4735-ba88-2c9a42703a19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Text">
+      <UniqueIdentifier>{77969934-7c18-4d73-8858-3f9948ccf859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Rendering">
+      <UniqueIdentifier>{f44bf44e-29f9-4d6e-8096-c1b68a4d4c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Rendering\Interfaces">
+      <UniqueIdentifier>{7afd2ab1-aa54-4030-a7cc-311fd19fdfa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Rendering\DirectX">
+      <UniqueIdentifier>{1540dfcb-6cf3-4d37-9d4e-7c8d90086ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Rendering\OpenGL">
+      <UniqueIdentifier>{2b405d59-376c-4ef7-aec5-4513a953ae02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Rendering\Vulkan">
+      <UniqueIdentifier>{63428175-cac0-430f-bc78-b9c09a6a0c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Objects">
+      <UniqueIdentifier>{b9dc2333-1ae6-491f-9178-a5620d5ba81d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Objects\Components">
+      <UniqueIdentifier>{d7dc7993-5488-4f46-9ea7-87a8f87bf907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Components">
+      <UniqueIdentifier>{9ed4d361-40fb-441c-8115-cbf8b91d4386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Objects\ComponentSystem">
+      <UniqueIdentifier>{2e75a016-ebd8-4cbf-8e5a-cea08c52aaa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\ComponentSystems">
+      <UniqueIdentifier>{e2709abb-9660-4d6e-9df0-3de3857a4827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Objects\RenderManagers">
+      <UniqueIdentifier>{ded362a7-19f1-400f-8d6f-0e36b62128d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\UI">
+      <UniqueIdentifier>{c1c89de5-eee4-4352-94bc-0ff682b30e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\CustomScripts">
+      <UniqueIdentifier>{e223050e-b493-477f-be1d-5596b48d1db0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Utility">
+      <UniqueIdentifier>{a32f2a8a-0779-4aeb-b286-24f63e1cc224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\UI\Components">
+      <UniqueIdentifier>{11a4e490-df76-47a6-8de6-43f0923beadd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\UI\ComponentSystems">
+      <UniqueIdentifier>{193bf054-5961-4ea7-9c95-52924e66c7d3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCore.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_Renderer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_VertexArray.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_Shader.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_VertexBuffer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_IndexBuffer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_UniformBuffer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_Texture.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="TextManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBufferBuilder.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider2D.h">
+      <Filter>Файлы заголовков\Objects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformSystem.cpp">
+      <Filter>Исходные файлы\ComponentSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_StorageBuffer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRendererSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRendererSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL_IndirectBuffer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPointer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_RenderManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CanvasSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_TransformSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Transform.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CompSystemsCore.h">
+      <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EngineCore.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_Renderer.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX_Renderer.h">
+      <Filter>Файлы заголовков\Rendering\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Vulkan_Renderer.h">
+      <Filter>Файлы заголовков\Rendering\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_VertexArray.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_VertexBuffer.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_Shader.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_IndexBuffer.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_UniformBuffer.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_Texture.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformBuffer.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="TextBufferBuilder.h">
+      <Filter>Файлы заголовков\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextManager.h">
+      <Filter>Файлы заголовков\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemContext.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Файлы заголовков\Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider3D.h">
+      <Filter>Файлы заголовков\Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CompSystemInterfaces.h">
+      <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformSystem.h">
+      <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptsMacros.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Файлы заголовков\Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderManager.h">
+      <Filter>Файлы заголовков\Objects\RenderManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageBuffer.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_StorageBuffer.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderManager.h">
+      <Filter>Файлы заголовков\Objects\RenderManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRendererSystem.h">
+      <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptBase.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>Файлы заголовков\Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRendererSystem.h">
+      <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Файлы заголовков\CustomScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectBuffer.h">
+      <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL_IndirectBuffer.h">
+      <Filter>Файлы заголовков\Rendering\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Файлы заголовков\Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraSystem.h">
+      <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SparseSet.h">
+      <Filter>Файлы заголовков\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPointer.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Файлы заголовков\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Файлы заголовков\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Transform.h">
+      <Filter>Файлы заголовков\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Файлы заголовков\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Файлы заголовков\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_RenderManager.h">
+      <Filter>Файлы заголовков\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasSystem.h">
+      <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_TransformSystem.h">
+      <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageSystem.h">
+      <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_CompSystemsCore.h">
+      <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\OpenGL\Basic Frag.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\Basic Vert.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\Basic Text Frag.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\Basic Text Vert.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="cpp.hint" />
+    <None Include="Shaders\OpenGL\Sprite Frag.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\Sprite Vert.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\Mesh Frag.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\Mesh Vert.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\UI Frag.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\UI Vert.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

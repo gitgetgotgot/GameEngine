@@ -1,0 +1,10 @@
+#pragma once
+
+class VertexBuffer {
+public:
+	virtual void bind() = 0;
+	virtual void unbind() = 0;
+	virtual void set_data(const void* data, size_t data_size, int usage) = 0;
+	virtual void update_data(const void* data, size_t data_size) = 0;
+	~VertexBuffer() {}
+};

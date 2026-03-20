@@ -1,0 +1,40 @@
+#pragma once
+#include "Renderer.h"
+#include "CanvasSystem.h"
+
+constexpr glm::vec3 UI_InstanceVertices[] = {
+	glm::vec3(-0.5f, -0.5f, 0.0f),
+	glm::vec3(-0.5f,  0.5f, 0.0f),
+	glm::vec3(0.5f,  0.5f, 0.0f),
+	glm::vec3(0.5f, -0.5f, 0.0f)
+};
+constexpr uint32_t UI_InstanceIndices[] = {
+	0, 1, 2,
+	0, 2, 3
+};
+
+class UI_RenderManager {
+public:
+	static UI_RenderManager* get_Instance() {
+		static UI_RenderManager uiRenderSystem;
+		return &uiRenderSystem;
+	}
+	void init(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer);
+	void update();
+	void render(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer);
+private:
+	UI_RenderManager() {}
+	~UI_RenderManager() {}
+
+	CanvasSystem* canvasSystem;
+
+	std::unique_ptr<Shader> shader;
+	BasicShaderUBData basicUniformData;
+	std::unique_ptr<VertexArray> vertexArray;
+	std::unique_ptr<VertexBuffer> vertexBuffer;
+	std::unique_ptr<IndexBuffer> indexBuffer;
+	std::unique_ptr<UniformBuffer> uniformBuffer;
+	std::unique_ptr<StorageBuffer> storageBuffer;
+
+	std::vector<UI_InstanceData> uiData;
+};
