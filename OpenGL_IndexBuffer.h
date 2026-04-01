@@ -10,7 +10,7 @@ public:
 	void bind() override;
 	void unbind() override;
 	void set_data(const void* data, size_t data_size, int usage) override;
-	void update_data(const void* data, size_t data_size) override;
+	void update_data(const void* data, size_t data_size, size_t offset = 0) override;
 private:
 	GLuint id;
 };

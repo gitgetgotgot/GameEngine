@@ -66,9 +66,13 @@ void Engine::UI::UI_Transform::set_scale(glm::vec3& scale_vec) {
 	mark_dirty();
 }
 
-void Engine::UI::UI_Transform::add_child(Engine::UI::ui_component_ptr<UI_Transform>& child_tr, Engine::UI::ui_component_ptr<UI_Transform>& parent_tr) {
+void Engine::UI::UI_Transform::add_child(Engine::UI::UI_Component_Ptr<UI_Transform>& child_tr, Engine::UI::UI_Component_Ptr<UI_Transform>& parent_tr) {
 	this->children.emplace_back(child_tr);
 	child_tr->parent = parent_tr;
+}
+
+glm::mat4 Engine::UI::UI_Transform::get_world_matrix() const {
+	return this->worldMatrix;
 }
 
 void Engine::UI::UI_Transform::update_modelMatrix() {

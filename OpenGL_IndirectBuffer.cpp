@@ -13,9 +13,9 @@ void OpenGL_IndirectBuffer::setData(const void* data, size_t size) {
 	glBufferData(GL_DRAW_INDIRECT_BUFFER, size, data, GL_DYNAMIC_DRAW);
 }
 
-void OpenGL_IndirectBuffer::updateData(const void* data, size_t size) {
+void OpenGL_IndirectBuffer::updateData(const void* data, size_t size, size_t offset) {
 	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, id);
-	glBufferSubData(GL_DRAW_INDIRECT_BUFFER, 0, size, data);
+	glBufferSubData(GL_DRAW_INDIRECT_BUFFER, offset, size, data);
 }
 
 void OpenGL_IndirectBuffer::bind() {

@@ -50,8 +50,8 @@ namespace Engine {
 			std::unique_ptr<Shader> createShader(ShaderDesc desc) override;
 
 			std::unique_ptr<Texture> createTextureFromFile(const char* filePath, bool isPixelised) override;
-			std::unique_ptr<Texture> createTextureFromData(unsigned char* image_bytes, int imgWidth, int imgHeight, int numOfColorChannels, bool isPixelised) override;
-			std::unique_ptr<Texture> createR8TextureFromData(unsigned char* image_bytes, int imgWidth, int imgHeight, bool isPixelised) override;
+			std::unique_ptr<Texture> createTextureFromData(const unsigned char* image_bytes, int imgWidth, int imgHeight, int numOfColorChannels, bool isPixelised) override;
+			std::unique_ptr<Texture> createR8TextureFromData(const unsigned char* image_bytes, int imgWidth, int imgHeight, bool isPixelised) override;
 		private:
 			GLFWwindow* window;
 		};

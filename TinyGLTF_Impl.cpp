@@ -1,0 +1,3 @@
+#define TINYGLTF_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <TinyGLTF/tiny_gltf.h>

@@ -2,50 +2,59 @@
 #include <iostream>
 
 OpenGL_Shader::OpenGL_Shader(ShaderDesc desc) {
-	std::string vertexContents = get_file_contents(desc.vertexEntry.c_str());
-	std::string fragmentContetns = get_file_contents(desc.fragmentEntry.c_str());
-	const char* vertexSource = vertexContents.c_str();
-	const char* fragmentSource = fragmentContetns.c_str();
+    std::string vertexContents = get_file_contents(desc.vertexEntry.c_str());
+    std::string fragmentContents = get_file_contents(desc.fragmentEntry.c_str());
 
-	GLint compile;
+    const char* vertexSource = vertexContents.c_str();
+    const char* fragmentSource = fragmentContents.c_str();
 
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexSource, NULL);
-	glCompileShader(vertexShader);
+    auto compileShader = [&](GLenum type, const char* src) {
+        GLuint shader = glCreateShader(type);
+        glShaderSource(shader, 1, &src, nullptr);
+        glCompileShader(shader);
 
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &compile);
-	if (!compile) {
-		GLchar info[1024];
-		glGetShaderInfoLog(vertexShader, 1024, nullptr, info);
-		std::cerr << "VERTEX SHADER ERROR: " << info << std::endl;
-	}
+        GLint success = 0;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-	glCompileShader(fragmentShader);
+        if (!success) {
+            GLint length = 0;
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &compile);
-	if (!compile) {
-		GLchar info[1024];
-		glGetShaderInfoLog(fragmentShader, 1024, nullptr, info);
-		std::cerr << "FRAGMENT SHADER ERROR: " << info << std::endl;
-	}
+            std::string info(length, '\0');
+            glGetShaderInfoLog(shader, length, nullptr, info.data());
 
-	this->id = glCreateProgram();
-	glAttachShader(this->id, vertexShader);
-	glAttachShader(this->id, fragmentShader);
-	glLinkProgram(this->id);
+            std::cerr << (type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT")
+                << " SHADER ERROR:\n" << info << std::endl;
+        }
 
-	glGetProgramiv(id, GL_LINK_STATUS, &compile);
-	if (!compile) {
-		GLchar info[1024];
-		glGetShaderInfoLog(id, 1024, nullptr, info);
-		std::cerr << "SHADER PROGRAM ERROR: " << info << std::endl;
-	}
+        return shader;
+        };
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexSource);
+    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentSource);
+
+    id = glCreateProgram();
+    glAttachShader(id, vertexShader);
+    glAttachShader(id, fragmentShader);
+    glLinkProgram(id);
+
+    GLint success = 0;
+    glGetProgramiv(id, GL_LINK_STATUS, &success);
+
+    if (!success) {
+        GLint length = 0;
+        glGetProgramiv(id, GL_INFO_LOG_LENGTH, &length);
+
+        std::string info(length, '\0');
+        glGetProgramInfoLog(id, length, nullptr, info.data());
+
+        std::cerr << "PROGRAM LINK ERROR:\n" << info << std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 }
+
 
 OpenGL_Shader::~OpenGL_Shader() {
 	glDeleteProgram(id);

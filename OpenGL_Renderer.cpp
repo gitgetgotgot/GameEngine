@@ -110,11 +110,11 @@ std::unique_ptr<Texture> Engine::Graphics::OpenGL_Renderer::createTextureFromFil
 	return std::make_unique<OpenGL_Texture>(filePath, isPixelised);
 }
 
-std::unique_ptr<Texture> Engine::Graphics::OpenGL_Renderer::createTextureFromData(unsigned char* image_bytes, int imgWidth, int imgHeight, int numOfColorChannels, bool isPixelised) {
+std::unique_ptr<Texture> Engine::Graphics::OpenGL_Renderer::createTextureFromData(const unsigned char* image_bytes, int imgWidth, int imgHeight, int numOfColorChannels, bool isPixelised) {
 	return std::make_unique<OpenGL_Texture>(image_bytes, imgWidth, imgHeight, numOfColorChannels, isPixelised);
 }
 
-std::unique_ptr<Texture> Engine::Graphics::OpenGL_Renderer::createR8TextureFromData(unsigned char* image_bytes, int imgWidth, int imgHeight, bool isPixelised)
+std::unique_ptr<Texture> Engine::Graphics::OpenGL_Renderer::createR8TextureFromData(const unsigned char* image_bytes, int imgWidth, int imgHeight, bool isPixelised)
 {
 	return std::make_unique<OpenGL_Texture>(image_bytes, imgWidth, imgHeight, isPixelised);
 }

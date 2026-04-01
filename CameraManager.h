@@ -18,6 +18,6 @@ private:
 	CameraManager() {}
 	~CameraManager() {}
 	Engine::Component::Camera defaultCamera;
-	Engine::Component::component_ptr<Engine::Component::Camera> active_camera;
-	Engine::Component::component_ptr<Engine::Component::Transform> active_camera_transform;
+	Engine::Component::Component_Ptr<Engine::Component::Camera> active_camera;
+	Engine::Component::Component_Ptr<Engine::Component::Transform> active_camera_transform;
 };

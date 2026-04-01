@@ -1,16 +1,16 @@
 #include "ObjectManager.h"
 
 void Engine::Object::ObjectManager::DestroyObject(uint32_t obj_id) {
-	DestroyedObjects::destroyed_objects.emplace_back(obj_id);
+	Engine::Systems::DestroyedObjects::destroyed_objects.emplace_back(obj_id);
 }
 
 void Engine::Object::ObjectManager::DestroyObject(object_ptr& object) {
-	DestroyedObjects::destroyed_objects.emplace_back(object.get_id());
+	Engine::Systems::DestroyedObjects::destroyed_objects.emplace_back(object.get_id());
 }
 
 void Engine::Object::ObjectManager::Update() {
-	if (DestroyedObjects::destroyed_objects.size()) {
-		for (auto& obj_id : DestroyedObjects::destroyed_objects) {
+	if (Engine::Systems::DestroyedObjects::destroyed_objects.size()) {
+		for (auto& obj_id : Engine::Systems::DestroyedObjects::destroyed_objects) {
 			//remove script (just one for now)
 			scripts.remove(obj_id);
 			//ADD OnDestroy here...
@@ -20,7 +20,7 @@ void Engine::Object::ObjectManager::Update() {
 			objects.remove(obj_id);
 			std::cout << "\t---Object (id = " << obj_id << ") removed---" << std::endl;
 		}
-		DestroyedObjects::destroyed_objects.clear();
+		Engine::Systems::DestroyedObjects::destroyed_objects.clear();
 	}
 	for (auto& script : scripts_with_Update) {
 		script->Update();

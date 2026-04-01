@@ -27,8 +27,8 @@ void SpriteRenderManager::init(std::unique_ptr<Engine::Graphics::RendererInterfa
 	storageBuffer->bind(0);
 	storageBuffer->setData(nullptr, sizeof(SpriteInstanceData) * 100);
 
-	trSystem = static_cast<TransformSystem*>(ComponentSystemsCore::get_Instance()->get_system<Engine::Component::Transform>());
-	srSystem = static_cast<SpriteRendererSystem*>(ComponentSystemsCore::get_Instance()->get_system<Engine::Component::SpriteRenderer>());
+	trSystem = static_cast<Engine::Systems::TransformSystem*>(Engine::Systems::ComponentSystemsCore::get_Instance()->get_system<Engine::Component::Transform>());
+	srSystem = static_cast<Engine::Systems::SpriteComponentSystem*>(Engine::Systems::ComponentSystemsCore::get_Instance()->get_system<Engine::Component::SpriteComponent>());
 }
 
 void SpriteRenderManager::update(Engine::Component::Camera& activeCamera) {
@@ -44,7 +44,7 @@ void SpriteRenderManager::update(Engine::Component::Camera& activeCamera) {
 	if (SpriteUpdater::addedSprites.size() > 0) {
 		for (auto& obj_id : SpriteUpdater::addedSprites) {
 			Engine::Component::Transform* tr_ptr = trSystem->get_component(obj_id);
-			Engine::Component::SpriteRenderer* sr_ptr = srSystem->get_component(obj_id);
+			Engine::Component::SpriteComponent* sr_ptr = srSystem->get_component(obj_id);
 			spritesData.add(SpriteInstanceData(sr_ptr->sprite, tr_ptr->worldMatrix), obj_id);
 		}
 		SpriteUpdater::addedSprites.clear();
@@ -52,7 +52,7 @@ void SpriteRenderManager::update(Engine::Component::Camera& activeCamera) {
 	//update existing sprites data
 	int size = srSystem->spriteRenderers.size();
 	for (int i = 0; i < size; i++) {
-		Engine::Component::SpriteRenderer& sr = srSystem->spriteRenderers[i];
+		Engine::Component::SpriteComponent& sr = srSystem->spriteRenderers[i];
 		spritesData.get(sr.obj_id)->modelMatrix = trSystem->transforms.get(sr.obj_id)->worldMatrix;
 	}
 	//update storage buffer

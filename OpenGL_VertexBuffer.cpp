@@ -21,7 +21,7 @@ void OpenGL_VertexBuffer::set_data(const void* data, size_t data_size, int usage
 	glBufferData(GL_ARRAY_BUFFER, data_size, data, usage);
 }
 
-void OpenGL_VertexBuffer::update_data(const void* data, size_t data_size) {
+void OpenGL_VertexBuffer::update_data(const void* data, size_t data_size, size_t offset) {
 	glBindBuffer(GL_ARRAY_BUFFER, this->id);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, data_size, data);
+	glBufferSubData(GL_ARRAY_BUFFER, offset, data_size, data);
 }

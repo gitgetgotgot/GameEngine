@@ -138,13 +138,13 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRendererSystem.cpp">
+    <ClCompile Include="SpriteComponentSystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="MeshManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="MeshRendererSystem.cpp">
+    <ClCompile Include="MeshComponentSystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="MeshRenderManager.cpp">
@@ -191,6 +191,21 @@
     </ClCompile>
     <ClCompile Include="CompSystemsCore.h">
       <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="TinyGLTF_Impl.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SubMesh.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,7 +299,7 @@
     <ClInclude Include="ScriptsMacros.h">
       <Filter>Файлы заголовков\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
+    <ClInclude Include="SpriteComponent.h">
       <Filter>Файлы заголовков\Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRenderManager.h">
@@ -299,7 +314,7 @@
     <ClInclude Include="MeshRenderManager.h">
       <Filter>Файлы заголовков\Objects\RenderManagers</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRendererSystem.h">
+    <ClInclude Include="SpriteComponentSystem.h">
       <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
     </ClInclude>
     <ClInclude Include="ScriptBase.h">
@@ -308,13 +323,13 @@
     <ClInclude Include="ScriptManager.h">
       <Filter>Файлы заголовков\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="MeshRenderer.h">
+    <ClInclude Include="MeshComponent.h">
       <Filter>Файлы заголовков\Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="MeshManager.h">
       <Filter>Файлы заголовков\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="MeshRendererSystem.h">
+    <ClInclude Include="MeshComponentSystem.h">
       <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
@@ -373,6 +388,15 @@
     </ClInclude>
     <ClInclude Include="UI_CompSystemsCore.h">
       <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="SubMesh.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

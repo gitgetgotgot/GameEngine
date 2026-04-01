@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>S:\Games\Visual Studio projects\SimpleGameEngine\Libraries\include;$(IncludePath)</IncludePath>
+    <IncludePath>S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\TinyGLTF;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\stb;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\json;S:\Games\Visual Studio projects\SimpleGameEngine\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>S:\Games\Visual Studio projects\SimpleGameEngine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,12 +148,15 @@
     <ClCompile Include="CompSystemsCore.h" />
     <ClCompile Include="EngineCore.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageSystem.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="MeshManager.cpp" />
-    <ClCompile Include="MeshRendererSystem.cpp" />
+    <ClCompile Include="MeshComponentSystem.cpp" />
     <ClCompile Include="MeshRenderManager.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="ObjectPointer.cpp" />
     <ClCompile Include="OpenGL_IndexBuffer.cpp" />
@@ -168,13 +171,15 @@
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
-    <ClCompile Include="SpriteRendererSystem.cpp" />
+    <ClCompile Include="SpriteComponentSystem.cpp" />
     <ClCompile Include="SpriteRenderManager.cpp" />
     <ClCompile Include="stb.cpp" />
+    <ClCompile Include="SubMesh.cpp" />
     <ClCompile Include="TextBufferBuilder.cpp" />
     <ClCompile Include="TextManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="TinyGLTF_Impl.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="TransformSystem.cpp" />
     <ClCompile Include="UI_RenderManager.cpp" />
@@ -197,10 +202,12 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IndirectBuffer.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="MeshManager.h" />
-    <ClInclude Include="MeshRenderer.h" />
-    <ClInclude Include="MeshRendererSystem.h" />
+    <ClInclude Include="MeshComponent.h" />
+    <ClInclude Include="MeshComponentSystem.h" />
     <ClInclude Include="MeshRenderManager.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectPointer.h" />
@@ -221,10 +228,11 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SparseSet.h" />
     <ClInclude Include="SpriteManager.h" />
-    <ClInclude Include="SpriteRenderer.h" />
-    <ClInclude Include="SpriteRendererSystem.h" />
+    <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="SpriteComponentSystem.h" />
     <ClInclude Include="SpriteRenderManager.h" />
     <ClInclude Include="StorageBuffer.h" />
+    <ClInclude Include="SubMesh.h" />
     <ClInclude Include="SystemContext.h" />
     <ClInclude Include="TextBufferBuilder.h" />
     <ClInclude Include="TextManager.h" />

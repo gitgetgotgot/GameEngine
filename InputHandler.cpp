@@ -15,13 +15,14 @@ void InputHandler::glfwWindowSizeCallback(GLFWwindow* window, int width, int hei
 
 void InputHandler::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if ((mods & GLFW_MOD_SHIFT) && shiftKeyMap.find(key) != shiftKeyMap.end()) {
-		if (action == GLFW_PRESS || action == GLFW_REPEAT)
+		/*if (action == GLFW_PRESS || action == GLFW_REPEAT)
 			SystemContext::keyBoard.keyStates[int(shiftKeyMap[key])] = true;
 		else if (action == GLFW_RELEASE)
-			SystemContext::keyBoard.keyStates[int(shiftKeyMap[key])] = false;
+			SystemContext::keyBoard.keyStates[int(shiftKeyMap[key])] = false;*/
+		SystemContext::keyBoard.keyStatesCurr[int(shiftKeyMap[key])] = action == GLFW_PRESS || action == GLFW_REPEAT;
 	}
 	else
-		SystemContext::keyBoard.keyStates[key] = glfwGetKey(window, key);
+		SystemContext::keyBoard.keyStatesCurr[key] = glfwGetKey(window, key) == GLFW_PRESS;
 }
 
 void InputHandler::cursor_position_callback(GLFWwindow* window, double mX, double mY) {
@@ -35,8 +36,8 @@ void InputHandler::cursor_position_callback(GLFWwindow* window, double mX, doubl
 }
 
 void InputHandler::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-	SystemContext::mouse.left_button = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-	SystemContext::mouse.right_button = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+	SystemContext::mouse.lb_curr = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+	SystemContext::mouse.rb_curr = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 }
 
 void InputHandler::mouse_wheel_callback(GLFWwindow* window, double xOffset, double yOffset) {

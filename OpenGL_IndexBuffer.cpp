@@ -21,7 +21,7 @@ void OpenGL_IndexBuffer::set_data(const void* data, size_t data_size, int usage)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data_size, data, usage);
 }
 
-void OpenGL_IndexBuffer::update_data(const void* data, size_t data_size) {
+void OpenGL_IndexBuffer::update_data(const void* data, size_t data_size, size_t offset) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data_size, data);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data_size, data);
 }

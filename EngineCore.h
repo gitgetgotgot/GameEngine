@@ -15,18 +15,15 @@
 #include "ObjectManager.h"
 #include "PlayerController.h"
 #include "SpriteRenderManager.h"
-#include "MeshRenderManager.h"
+#include "ModelManager.h"
 #include "UI_RenderManager.h"
 #include "CameraManager.h"
-#include "TextureManager.h"
 
 #include "UI_TransformSystem.h"
 #include "ImageSystem.h"
 
-struct BasicVertex {
-	glm::vec3 pos;
-	glm::vec2 UV;
-};
+namespace EC = Engine::Component;
+namespace ES = Engine::Systems;
 
 class EngineCore {
 public:
@@ -36,6 +33,7 @@ public:
 private:
 	void update();
 	void render();
+	void input_endFrame();
 
 	//initializers
 	void init_Graphic_API();
@@ -52,8 +50,8 @@ private:
 	std::unique_ptr<Engine::Graphics::RendererInterface> renderer;
 	Engine::Object::ObjectManager* objectManager;
 	CameraManager* cameraManager;
-	ComponentSystemsCore* compSysCore;
-	UI_ComponentSystemsCore* uiCompSysCore;
+	ES::ComponentSystemsCore* compSysCore;
+	ES::UI_ComponentSystemsCore* uiCompSysCore;
 	SpriteRenderManager* spriteRenderer;
 	MeshRenderManager* meshRenderer;
 	UI_RenderManager* uiRenderer;
@@ -61,11 +59,14 @@ private:
 	TextureManager* texManager;
 	SpriteManager* spriteManager;
 	MeshManager* meshManager;
+	Engine::Models::ModelManager* modelManager;
 
 	std::unique_ptr<TextManager> textManager; //temporary
 
 	//test
-	Engine::Component::component_ptr<Engine::Component::Camera> cameraMain;
-	Engine::Component::component_ptr<Engine::Component::Transform> camera_transform;
+	EC::Component_Ptr<EC::Camera> cameraMain;
+	EC::Component_Ptr<EC::Transform> camera_transform;
 	bool can_control_camera = false;
+
+	void test_method();
 };

@@ -1,10 +1,6 @@
 #include "MeshRenderManager.h"
 
 void MeshRenderManager::init(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer) {
-	std::vector<uint32_t> indices;
-	std::vector<MeshVertex> vertices;
-	load_basic_meshes(indices, vertices);
-
 	ShaderDesc desc("", "Shaders/OpenGL/Mesh Vert.glsl", "Shaders/OpenGL/Mesh Frag.glsl");
 	shader = renderer->createShader(desc);
 	shader->bind();
@@ -13,15 +9,14 @@ void MeshRenderManager::init(std::unique_ptr<Engine::Graphics::RendererInterface
 	vertexArray->bind();
 
 	vertexBuffer = renderer->createVertexBuffer();
-	vertexBuffer->set_data(vertices.data(), sizeof(MeshVertex) * vertices.size(), renderer->STATIC_USAGE);
+	vertexBuffer->set_data(nullptr, sizeof(SubMeshVertex) * MAX_MESH_VERTEX_BUFFER_SIZE, renderer->DYNAMIC_USAGE);
 
-	vertexArray->add_attribute(VertexAttribute(0, 3, offsetof(MeshVertex, MeshVertex::pos), sizeof(MeshVertex)), vertexBuffer);
-	vertexArray->add_attribute(VertexAttribute(1, 3, offsetof(MeshVertex, MeshVertex::normal), sizeof(MeshVertex)), vertexBuffer);
-	vertexArray->add_attribute(VertexAttribute(2, 2, offsetof(MeshVertex, MeshVertex::UV), sizeof(MeshVertex)), vertexBuffer);
-	vertexArray->add_attribute(VertexAttribute(3, 1, offsetof(MeshVertex, MeshVertex::material_id), sizeof(MeshVertex)), vertexBuffer);
+	vertexArray->add_attribute(VertexAttribute(0, 3, offsetof(SubMeshVertex, SubMeshVertex::pos), sizeof(SubMeshVertex)), vertexBuffer);
+	vertexArray->add_attribute(VertexAttribute(1, 3, offsetof(SubMeshVertex, SubMeshVertex::normal), sizeof(SubMeshVertex)), vertexBuffer);
+	vertexArray->add_attribute(VertexAttribute(2, 2, offsetof(SubMeshVertex, SubMeshVertex::UV), sizeof(SubMeshVertex)), vertexBuffer);
 
 	indexBuffer = renderer->createIndexBuffer();
-	indexBuffer->set_data(indices.data(), sizeof(uint32_t) * indices.size(), renderer->STATIC_USAGE);
+	indexBuffer->set_data(nullptr, sizeof(uint32_t) * MAX_MESH_INDEX_BUFFER_SIZE, renderer->DYNAMIC_USAGE);
 
 	vertexArray->unbind();
 	indexBuffer->unbind();
@@ -32,34 +27,16 @@ void MeshRenderManager::init(std::unique_ptr<Engine::Graphics::RendererInterface
 
 	storageBuffer = renderer->createStorageBuffer();
 	storageBuffer->bind(1);
-	storageBuffer->setData(nullptr, sizeof(glm::mat4) * 100);
+	storageBuffer->setData(nullptr, sizeof(SubMeshInstanceData) * MAX_MESH_INSTANCES);
 
 	indirectBuffer = renderer->createIndirectBuffer();
-	indirectBuffer->setData(drawCommands.data(), sizeof(DrawElementsIndirectCommand) * drawCommands.size());
+	indirectBuffer->setData(nullptr, sizeof(DrawElementsIndirectCommand) * MAX_INDIRECT_COMMANDS);
 
-	trSystem = static_cast<TransformSystem*>(ComponentSystemsCore::get_Instance()->get_system<Engine::Component::Transform>());
-	mrSystem = static_cast<MeshRendererSystem*>(ComponentSystemsCore::get_Instance()->get_system<Engine::Component::MeshRenderer>());
-}
-
-void MeshRenderManager::load_basic_meshes(std::vector<uint32_t>& indices, std::vector<MeshVertex>& vertices) {
-	//add draw command and update main buffers
-	uint32_t index_offset = 0, vertex_offset = 0;
-	Mesh* mesh;
-	for (int i = 0; i < 4; i++) {
-		mesh = MeshManager::get_Instance()->get_mesh(i);
-
-		vertices.insert(vertices.end(), mesh->vertices.begin(), mesh->vertices.end());
-		indices.insert(indices.end(), mesh->indices.begin(), mesh->indices.end());
-
-		drawCommands.emplace_back(DrawElementsIndirectCommand(mesh->indices.size(), 0, index_offset, vertex_offset, 0)); //SHOULD THINK ABOUT FIRST INSTANCE
-		index_offset += mesh->indices.size();
-		vertex_offset += mesh->vertices.size();
-	}
-	drawCommands[2].baseInstance = 1;
-	//after loading buffers and commands, shrink_to_fit to free unused memory in temporary buffers
-	vertices.shrink_to_fit();
-	indices.shrink_to_fit();
-	drawCommands.shrink_to_fit();
+	trSystem = static_cast<Engine::Systems::TransformSystem*>(Engine::Systems::ComponentSystemsCore::get_Instance()->get_system<Engine::Component::Transform>());
+	mrSystem = static_cast<Engine::Systems::MeshComponentSystem*>(Engine::Systems::ComponentSystemsCore::get_Instance()->get_system<Engine::Component::MeshComponent>());
+	meshMgr = MeshManager::get_Instance();
+	subMeshMgr = SubMeshManager::get_Instance();
+	matMgr = MaterialManager::get_Instance();
 }
 
 void MeshRenderManager::add_indices_to_buffer(std::vector<uint32_t>& indices, uint32_t indexCount) {
@@ -82,37 +59,57 @@ void MeshRenderManager::update(Engine::Component::Camera& activeCamera) {
 	//delete removed meshes data
 	if (MeshUpdater::deletedMeshes.size()) {
 		for (auto& deleted_mesh_info : MeshUpdater::deletedMeshes) {
-			//delete matrix with object id
-			meshModelMatrices.remove(deleted_mesh_info.first);
-			//decrease amount of instances of this mesh with mesh id
-			drawCommands[deleted_mesh_info.second].instanceCount--;
-			
+			//GET MESH
+			Mesh& deleted_mesh = meshMgr->get_mesh(deleted_mesh_info.second);
+			//GET SUBMESHES
+			for (auto& submesh_id : deleted_mesh.subMeshes) {
+				//remove model matrix
+				meshesInstanceData.remove(submesh_id);
+				//decrease amount of instances of this submesh
+				drawCommands[submesh_id].instanceCount--;
+			}
 			std::cout << "\t---Mesh model matrix (id = " << deleted_mesh_info.first << ") removed---" << std::endl;
 		}
 		MeshUpdater::deletedMeshes.clear();
+		update_indirect_base_instances();
 	}
 	//add new meshes data
 	if (MeshUpdater::addedMeshes.size() > 0) {
 		for (auto& obj_id : MeshUpdater::addedMeshes) {
 			Engine::Component::Transform* tr_ptr = trSystem->get_component(obj_id);
-			Engine::Component::MeshRenderer* mr_ptr = mrSystem->get_component(obj_id);
-			meshModelMatrices.add(std::move(tr_ptr->worldMatrix), obj_id);
-			
-			drawCommands[mr_ptr->mesh->id].instanceCount++;
+			Engine::Component::MeshComponent* mc_ptr = mrSystem->get_component(obj_id);
+			Mesh& addedMesh = meshMgr->get_mesh(mc_ptr->mesh_id);
+			for (auto& submesh_id : addedMesh.subMeshes) {
+				Material& material = matMgr->get_material(subMeshMgr->get(submesh_id).material_id);
+				meshesInstanceData.add(SubMeshInstanceData(
+					tr_ptr->worldMatrix,
+					material.albedoID,
+					material.normalID,
+					material.roughnessID,
+					material.metallicID
+				), submesh_id);
+				drawCommands[submesh_id].instanceCount++;
+				std::cout << "--Submesh added to renderer [id = " << submesh_id <<
+					"] Material id = " << material.id << ", albedo id = " << material.albedoID << std::endl;
+			}
 		}
 		MeshUpdater::addedMeshes.clear();
+		update_indirect_base_instances();
 	}
 	//update existing meshes data
-	uint32_t size = mrSystem->meshRenderers.size();
+	uint32_t size = mrSystem->meshComponents.size();
 	for (int i = 0; i < size; i++) {
-		Engine::Component::MeshRenderer& mr = mrSystem->meshRenderers[i];
-		*meshModelMatrices.get(mr.obj_id) = trSystem->transforms.get(mr.obj_id)->worldMatrix;
+		Engine::Component::MeshComponent& mc = mrSystem->meshComponents[i];
+		Mesh& mesh = meshMgr->get_mesh(mc.mesh_id);
+		for (auto& submesh_id : mesh.subMeshes) {
+			meshesInstanceData.get(submesh_id)->modelMatrix = trSystem->transforms.get(mc.obj_id)->worldMatrix;
+		}
 	}
 
 	//update indirect buffer
 	indirectBuffer->updateData(drawCommands.data(), sizeof(DrawElementsIndirectCommand) * drawCommands.size());
 	//update storage buffer
-	storageBuffer->updateData(meshModelMatrices.data(), meshModelMatrices.size() * sizeof(glm::mat4));
+	storageBuffer->updateData(meshesInstanceData.data(), meshesInstanceData.size() * sizeof(SubMeshInstanceData));
 
 	//update camera data
 	basicUniformData.view = activeCamera.get_view_matrix();
@@ -122,4 +119,51 @@ void MeshRenderManager::update(Engine::Component::Camera& activeCamera) {
 
 void MeshRenderManager::render(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer) {
 	renderer->renderMultiIndirectData(shader, vertexArray, vertexBuffer, indexBuffer, indirectBuffer, drawCommands.size(), sizeof(DrawElementsIndirectCommand));
+}
+
+void MeshRenderManager::load_submesh(
+	std::vector<uint32_t>& submesh_indices,
+	std::vector<SubMeshVertex>& submesh_vertices,
+	SubMesh& submesh
+) {
+	drawCommands.emplace_back(
+		DrawElementsIndirectCommand(submesh.indexCount, 0, index_current_global_size, vertex_current_global_size, 0)
+	);
+	//add new data at the end to buffers
+	vertexBuffer->update_data(submesh_vertices.data(), sizeof(SubMeshVertex) * submesh_vertices.size(), sizeof(SubMeshVertex) * vertex_current_global_size);
+	indexBuffer->update_data(submesh_indices.data(), sizeof(uint32_t) * submesh_indices.size(), sizeof(uint32_t) * index_current_global_size);
+	//simply update indirectBuffer
+	indirectBuffer->updateData(drawCommands.data(), sizeof(DrawElementsIndirectCommand) * drawCommands.size(), 0);
+
+	index_current_global_size += submesh.indexCount;
+	vertex_current_global_size += submesh.vertexCount;
+}
+
+void MeshRenderManager::load_submeshes(
+	std::vector<uint32_t>& submeshes_indices,
+	std::vector<SubMeshVertex>& submeshes_vertices,
+	std::vector<SubMesh>& submeshes
+) {
+	//add new data at the end to buffers
+	vertexBuffer->update_data(submeshes_vertices.data(), sizeof(SubMeshVertex) * submeshes_vertices.size(), sizeof(SubMeshVertex) * vertex_current_global_size);
+	indexBuffer->update_data(submeshes_indices.data(), sizeof(uint32_t) * submeshes_indices.size(), sizeof(uint32_t) * index_current_global_size);
+
+	for (SubMesh& submesh : submeshes) {
+		drawCommands.emplace_back(
+			DrawElementsIndirectCommand(submesh.indexCount, 0, index_current_global_size, vertex_current_global_size, 0)
+		);
+		index_current_global_size += submesh.indexCount;
+		vertex_current_global_size += submesh.vertexCount;
+	}
+
+	//simply update indirectBuffer
+	indirectBuffer->updateData(drawCommands.data(), sizeof(DrawElementsIndirectCommand) * drawCommands.size(), 0);
+}
+
+void MeshRenderManager::update_indirect_base_instances() {
+	uint32_t offset = 0;
+	for (auto& command : drawCommands) {
+		command.baseInstance = offset;
+		offset += command.instanceCount;
+	}
 }

@@ -13,9 +13,9 @@ void OpenGL_StorageBuffer::setData(const void* data, size_t size) {
 	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_DRAW);
 }
 
-void OpenGL_StorageBuffer::updateData(const void* data, size_t size) {
+void OpenGL_StorageBuffer::updateData(const void* data, size_t size, size_t offset) {
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->id);
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, data);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 }
 
 void OpenGL_StorageBuffer::bind(uint32_t slot) {

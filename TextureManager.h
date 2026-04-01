@@ -1,7 +1,9 @@
 #pragma once
-#include <vector>
+#include "SparseSet.h"
 #include <memory>
 #include "Renderer.h"
+
+constexpr size_t MAX_TEXTURES = 2000;
 
 class TextureManager {
 public:
@@ -9,10 +11,23 @@ public:
 		static TextureManager texMgr;
 		return &texMgr;
 	}
-	void load(const char* filePath, bool isPixelised, std::unique_ptr<Engine::Graphics::RendererInterface>& renderer);
-	std::unique_ptr<Texture>& get(uint32_t id);
+	void init(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer);
+	Texture* create_texture_from_file(const char* filePath, bool isPixelised);
+	Texture* create_texture_from_data(
+		const unsigned char* image_bytes,
+		int imgWidth,
+		int imgHeight,
+		int numOfColorChannels,
+		bool isPixelised
+	);
+	void remove(uint32_t id);
+	Texture* get(uint32_t id);
 private:
 	TextureManager() {}
 	~TextureManager() {}
-	std::vector<std::unique_ptr<Texture>> textures;
+	sparse_set<std::unique_ptr<Texture>> textures;
+	std::vector<uint32_t> free_ids;
+	std::unique_ptr<StorageBuffer> textureHandlesBuffer;
+	std::vector<uint64_t> textureHandles; //should also make as sparse_set probably
+	Engine::Graphics::RendererInterface* renderer;
 };

@@ -1,6 +1,6 @@
 #pragma once
 #include "TransformSystem.h"
-#include "SpriteRendererSystem.h"
+#include "SpriteComponentSystem.h"
 #include "Renderer.h"
 #include "Camera.h"
 
@@ -35,8 +35,8 @@ public:
 	void update(Engine::Component::Camera& activeCamera);
 	void render(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer);
 private:
-	TransformSystem* trSystem;
-	SpriteRendererSystem* srSystem;
+	Engine::Systems::TransformSystem* trSystem = nullptr;
+	Engine::Systems::SpriteComponentSystem* srSystem = nullptr;
 
 	std::unique_ptr<Shader> shader;
 	BasicShaderUBData basicUniformData;

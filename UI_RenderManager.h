@@ -26,15 +26,16 @@ private:
 	UI_RenderManager() {}
 	~UI_RenderManager() {}
 
-	CanvasSystem* canvasSystem;
+	Engine::Systems::CanvasSystem* canvasSystem = nullptr;
+	Engine::Systems::UI_TransformSystem* ui_transformSystem = nullptr;
 
 	std::unique_ptr<Shader> shader;
-	BasicShaderUBData basicUniformData;
+	BasicShaderUBData basicUniformData{};
 	std::unique_ptr<VertexArray> vertexArray;
 	std::unique_ptr<VertexBuffer> vertexBuffer;
 	std::unique_ptr<IndexBuffer> indexBuffer;
 	std::unique_ptr<UniformBuffer> uniformBuffer;
 	std::unique_ptr<StorageBuffer> storageBuffer;
 
-	std::vector<UI_InstanceData> uiData;
+	std::vector<Engine::Systems::UI_InstanceData> uiData;
 };
