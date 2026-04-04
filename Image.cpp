@@ -20,20 +20,10 @@ void Engine::UI::Image::flipY(bool is_flipped) {
 	mark_dirty();
 }
 
-void Engine::UI::Image::mark_dirty() {
-	if (!isDirty) {
-		isDirty = true;
-		ImageUpdater::dirtyImages.emplace_back(obj_id);
-	}
-}
-
-void Engine::UI::Image::update_model_matrix() {
-	this->data.modelMatrix = transform_ptr->get_world_matrix();
-}
-
-void Engine::UI::Image::update_ui_data() {
+void Engine::UI::Image::_internal_update_ui_data() {
 	isDirty = false;
 	data.color = this->color;
+	data.texture_id = sprite->texture_id;
 	if (flip_X) {
 		if (flip_Y) {
 			//Y and X are flipped
@@ -65,5 +55,12 @@ void Engine::UI::Image::update_ui_data() {
 			data.UV[2] = sprite->UV[2];
 			data.UV[3] = sprite->UV[3];
 		}
+	}
+}
+
+void Engine::UI::Image::mark_dirty() {
+	if (!isDirty) {
+		isDirty = true;
+		ImageUpdater::dirtyImages.emplace_back(obj_id);
 	}
 }

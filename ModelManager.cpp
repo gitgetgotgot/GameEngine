@@ -1,5 +1,4 @@
 #include "ModelManager.h"
-#include "ObjectManager.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <stb/stb_image.h>
 
@@ -398,6 +397,28 @@ void Engine::Models::ModelManager::load_model(std::string& path) {
         Material& mat = MaterialManager::get_Instance()->get_material(sm.material_id);
         std::cout << "------Submesh Material [id = " << mat.id << "]: albedoID = " << mat.albedoID << std::endl;
     }
+
+    for (auto& scene : model.scenes) {
+        std::cout << "-Scene: " << scene.name << std::endl;
+    }
+    for (auto& node : model.nodes) {
+        if (node.mesh >= 0) {
+            std::cout << "--Node: " << node.name << ", Mesh: " << node.mesh << std::endl;
+            for (auto& child_id : node.children) {
+                tinygltf::Node& child = model.nodes[child_id];
+                std::cout << "----Child Node: " << child.name << ", Mesh: " << child.mesh << std::endl;
+            }
+        }
+    }
+    for (auto& node : model.nodes) {
+        if (!node.children.empty()) {
+            std::cout << "Node: " << node.name << ", Mesh: " << node.mesh << std::endl;
+            for (auto& child_id : node.children) {
+                tinygltf::Node& child = model.nodes[child_id];
+                std::cout << "----Child Node: " << child.name << ", Mesh: " << child.mesh << std::endl;
+            }
+        }
+    }
 }
 
 void Engine::Models::ModelManager::delete_model(uint32_t id) {
@@ -408,22 +429,26 @@ Engine::Models::Model* Engine::Models::ModelManager::get_model(uint32_t id) {
     return models.get(id);
 }
 
-void Engine::Models::ModelManager::create_model_object(uint32_t model_id) {
+Engine::Object::object_ptr Engine::Models::ModelManager::create_model_object(uint32_t model_id) {
     Model* model = models.get(model_id);
-    if (!model) return;
-    Engine::Object::ObjectManager* objectManager = Engine::Object::ObjectManager::get_Instance();
-    MeshManager* meshManager = MeshManager::get_Instance();
+    if (!model) return Object::object_ptr(0);
+
+    Object::ObjectManager* objectManager = Object::ObjectManager::get_Instance();
+    Engine::Object::object_ptr root = objectManager->InstantiateObject();
+    auto root_transform = root->add_component<Component::Transform>();
+
     for (auto& node : model->mesh_nodes) {
         auto mesh_object = objectManager->InstantiateObject();
-        auto mesh_transform = mesh_object->add_component<Engine::Component::Transform>();
-        auto mesh_comp = mesh_object->add_component<Engine::Component::MeshComponent>();
+        auto mesh_transform = mesh_object->add_component<Component::Transform>();
+        auto mesh_comp = mesh_object->add_component<Component::MeshComponent>();
         mesh_comp->mesh_id = node.mesh_id;
         mesh_transform->translateLocal(node.localPos);
         mesh_transform->set_scale(node.localScale);
         mesh_transform->set_rotation(node.localRotation);
+        root_transform->add_child(mesh_transform);
     }
 
-    return ;
+    return root;
 }
 
 Mesh& Engine::Models::ModelManager::create_mesh_from_model(

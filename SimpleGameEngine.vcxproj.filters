@@ -16,9 +16,6 @@
     <Filter Include="Файлы ресурсов\OpenGL Shaders">
       <UniqueIdentifier>{9f53956d-f22c-4735-ba88-2c9a42703a19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков\Text">
-      <UniqueIdentifier>{77969934-7c18-4d73-8858-3f9948ccf859}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы заголовков\Rendering">
       <UniqueIdentifier>{f44bf44e-29f9-4d6e-8096-c1b68a4d4c4e}</UniqueIdentifier>
     </Filter>
@@ -67,6 +64,9 @@
     <Filter Include="Файлы заголовков\UI\ComponentSystems">
       <UniqueIdentifier>{193bf054-5961-4ea7-9c95-52924e66c7d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\UI\Text">
+      <UniqueIdentifier>{77969934-7c18-4d73-8858-3f9948ccf859}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,7 +105,7 @@
     <ClCompile Include="stb.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="TextManager.cpp">
+    <ClCompile Include="SimpleTextRenderer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="TextBufferBuilder.cpp">
@@ -207,6 +207,21 @@
     <ClCompile Include="SubMesh.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SDF_Text.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="SDF_TextSystem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineCore.h">
@@ -264,10 +279,10 @@
       <Filter>Файлы заголовков\Rendering\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="TextBufferBuilder.h">
-      <Filter>Файлы заголовков\Text</Filter>
+      <Filter>Файлы заголовков\UI\Text</Filter>
     </ClInclude>
-    <ClInclude Include="TextManager.h">
-      <Filter>Файлы заголовков\Text</Filter>
+    <ClInclude Include="SimpleTextRenderer.h">
+      <Filter>Файлы заголовков\UI\Text</Filter>
     </ClInclude>
     <ClInclude Include="InputHandler.h">
       <Filter>Файлы заголовков</Filter>
@@ -398,6 +413,24 @@
     <ClInclude Include="SubMesh.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Component.h">
+      <Filter>Файлы заголовков\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonSystem.h">
+      <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="SDF_Text.h">
+      <Filter>Файлы заголовков\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SDF_TextSystem.h">
+      <Filter>Файлы заголовков\UI\ComponentSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.h">
+      <Filter>Файлы заголовков\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\OpenGL\Basic Frag.glsl">
@@ -431,5 +464,16 @@
     <None Include="Shaders\OpenGL\UI Vert.glsl">
       <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
     </None>
+    <None Include="Shaders\OpenGL\SDF_Text Frag.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+    <None Include="Shaders\OpenGL\SDF_Text Vert.glsl">
+      <Filter>Файлы ресурсов\OpenGL Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SimpleGameEngine.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

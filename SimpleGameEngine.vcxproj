@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoxCollider2D.h" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonSystem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
@@ -147,6 +149,7 @@
     <ClCompile Include="CanvasSystem.cpp" />
     <ClCompile Include="CompSystemsCore.h" />
     <ClCompile Include="EngineCore.cpp" />
+    <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageSystem.cpp" />
@@ -169,6 +172,8 @@
     <ClCompile Include="OpenGL_VertexArray.cpp" />
     <ClCompile Include="OpenGL_VertexBuffer.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="SDF_Text.cpp" />
+    <ClCompile Include="SDF_TextSystem.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="SpriteComponentSystem.cpp" />
@@ -176,7 +181,7 @@
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="SubMesh.cpp" />
     <ClCompile Include="TextBufferBuilder.cpp" />
-    <ClCompile Include="TextManager.cpp" />
+    <ClCompile Include="SimpleTextRenderer.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TinyGLTF_Impl.cpp" />
@@ -189,6 +194,7 @@
   <ItemGroup>
     <ClInclude Include="BoxCollider3D.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ButtonSystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="CameraSystem.h" />
@@ -197,6 +203,7 @@
     <ClInclude Include="CompSystemInterfaces.h" />
     <ClInclude Include="DirectX_Renderer.h" />
     <ClInclude Include="EngineCore.h" />
+    <ClInclude Include="FontManager.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageSystem.h" />
     <ClInclude Include="IndexBuffer.h" />
@@ -212,6 +219,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectPointer.h" />
     <ClInclude Include="OpenGL_IndirectBuffer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ScriptManager.h" />
     <ClInclude Include="ScriptsMacros.h" />
     <ClInclude Include="OpenGL_IndexBuffer.h" />
@@ -225,6 +233,8 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ScriptBase.h" />
+    <ClInclude Include="SDF_Text.h" />
+    <ClInclude Include="SDF_TextSystem.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SparseSet.h" />
     <ClInclude Include="SpriteManager.h" />
@@ -235,12 +245,13 @@
     <ClInclude Include="SubMesh.h" />
     <ClInclude Include="SystemContext.h" />
     <ClInclude Include="TextBufferBuilder.h" />
-    <ClInclude Include="TextManager.h" />
+    <ClInclude Include="SimpleTextRenderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TransformSystem.h" />
+    <ClInclude Include="UI_Component.h" />
     <ClInclude Include="UI_CompSystemsCore.h" />
     <ClInclude Include="UI_RenderManager.h" />
     <ClInclude Include="UI_Transform.h" />
@@ -259,10 +270,15 @@
     <None Include="Shaders\OpenGL\Basic Vert.glsl" />
     <None Include="Shaders\OpenGL\Mesh Frag.glsl" />
     <None Include="Shaders\OpenGL\Mesh Vert.glsl" />
+    <None Include="Shaders\OpenGL\SDF_Text Frag.glsl" />
+    <None Include="Shaders\OpenGL\SDF_Text Vert.glsl" />
     <None Include="Shaders\OpenGL\Sprite Frag.glsl" />
     <None Include="Shaders\OpenGL\Sprite Vert.glsl" />
     <None Include="Shaders\OpenGL\UI Frag.glsl" />
     <None Include="Shaders\OpenGL\UI Vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SimpleGameEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #pragma once
-#include "UI_Transform.h"
+#include "UI_Component.h"
 #include "SpriteManager.h"
 
 struct ImageUpdater {
@@ -13,27 +13,21 @@ namespace Engine::Systems {
 	class ImageSystem;
 }
 
-namespace Engine {
-	namespace UI {
-		struct Image {
-			friend class Engine::Systems::ImageSystem;
-			Sprite* sprite;
-			glm::vec4 color;
-			bool flip_X = false;
-			bool flip_Y = false;
-			bool isActive = true;
-			void set_sprite(Sprite* sprite);
-			void set_color(glm::vec4 color);
-			void flipX(bool is_flipped);
-			void flipY(bool is_flipped);
-		private:
-			uint32_t obj_id;
-			void mark_dirty();
-			void update_model_matrix();
-			void update_ui_data();
-			UI_Component_Ptr<Engine::UI::UI_Transform> transform_ptr;
-			Engine::Systems::UI_InstanceData data{};
-			bool isDirty = false;
-		};
-	}
+namespace Engine::UI {
+	class Image : public UI_Component {
+		friend class Engine::Systems::ImageSystem;
+	public:
+		Sprite* sprite;
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		bool flip_X = false;
+		bool flip_Y = false;
+		void set_sprite(Sprite* sprite);
+		void set_color(glm::vec4 color);
+		void flipX(bool is_flipped);
+		void flipY(bool is_flipped);
+		void _internal_update_ui_data() override;
+	private:
+		void mark_dirty() override;
+		Engine::Systems::UI_InstanceData data{};
+	};
 }

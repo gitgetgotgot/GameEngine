@@ -3,7 +3,7 @@
 void MeshRenderManager::init(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer) {
 	ShaderDesc desc("", "Shaders/OpenGL/Mesh Vert.glsl", "Shaders/OpenGL/Mesh Frag.glsl");
 	shader = renderer->createShader(desc);
-	shader->bind();
+	//shader->bind();
 
 	vertexArray = renderer->createVertexArray();
 	vertexArray->bind();

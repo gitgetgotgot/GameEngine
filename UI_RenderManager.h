@@ -2,6 +2,9 @@
 #include "Renderer.h"
 #include "CanvasSystem.h"
 
+constexpr uint32_t MAX_UI_ELEMENTS = 500;
+constexpr uint32_t MAX_TEXT_SYMBOLS = 2000;
+
 constexpr glm::vec3 UI_InstanceVertices[] = {
 	glm::vec3(-0.5f, -0.5f, 0.0f),
 	glm::vec3(-0.5f,  0.5f, 0.0f),
@@ -37,5 +40,9 @@ private:
 	std::unique_ptr<UniformBuffer> uniformBuffer;
 	std::unique_ptr<StorageBuffer> storageBuffer;
 
+	std::unique_ptr<Shader> text_shader;
+	std::unique_ptr<StorageBuffer> storageTextBuffer;
+
 	std::vector<Engine::Systems::UI_InstanceData> uiData;
+	std::vector<Engine::Systems::UI_InstanceData> uiTextData;
 };

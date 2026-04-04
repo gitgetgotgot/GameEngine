@@ -1,6 +1,9 @@
 #include "CanvasSystem.h"
+#include "UI_Transform.h"
 
 void Engine::Systems::CanvasSystem::add_component(Engine::UI::Canvas&& comp, uint32_t obj_id) {
+	comp.obj_id = obj_id;
+	comp.obj_transform = UI::UI_Component_Ptr<UI::UI_Transform>(obj_id);
 	canvases.emplace(obj_id, comp);
 }
 

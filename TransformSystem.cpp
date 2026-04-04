@@ -25,7 +25,7 @@ void Engine::Systems::TransformSystem::update() {
 	if (TransformUpdater::dirtyTransforms.size()) {
 		for (auto& id : TransformUpdater::dirtyTransforms) {
 			Engine::Component::Transform* tr = transforms.get(id);
-			if(tr) tr->update_modelMatrix();
+			if(tr) tr->update_world_matrix();
 		}
 		TransformUpdater::dirtyTransforms.clear();
 	}

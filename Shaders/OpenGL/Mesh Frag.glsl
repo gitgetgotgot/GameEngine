@@ -15,10 +15,8 @@ uniform vec3 lightDir = normalize(vec3(-1.0, -1.0, -1.0));
 
 void main()
 {
-	//sampler2D tex = sampler2D(texHandles[albedo_ID]);
 	vec4 texColor = texture(sampler2D(texHandles[albedo_ID]), uv);
 	if(texColor.a == 0.0) discard;
-	//fragColor = texColor;
 
 	vec3 N = normalize(normal);
 	vec3 L = normalize(-lightDir);

@@ -3,7 +3,6 @@
 
 namespace Engine::Systems {
 	class ImageSystem : public UI_IComponentSystem<Engine::UI::Image> {
-		friend class UI_RenderManager;
 	public:
 		void add_component(Engine::UI::Image&& comp, uint32_t obj_id) override;
 		Engine::UI::Image* get_component(uint32_t obj_id) override;

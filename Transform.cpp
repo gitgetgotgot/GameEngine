@@ -1,8 +1,11 @@
 #include "Transform.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 Engine::Component::Transform::Transform(float x, float y, float z) {
 	position.x = x; position.y = y; position.z = z;
-	update_modelMatrix();
+	update_world_matrix();
 }
 
 void Engine::Component::Transform::translateLocal(float x, float y, float z) {
@@ -110,18 +113,19 @@ void Engine::Component::Transform::set_scale(glm::vec3& scale_vec) {
 	mark_dirty();
 }
 
-void Engine::Component::Transform::add_child(Component_Ptr<Transform>& child_tr, Component_Ptr<Transform>& parent_tr) {
+void Engine::Component::Transform::add_child(Component_Ptr<Transform>& child_tr) {
 	this->children.emplace_back(child_tr);
-	child_tr->parent = parent_tr;
+	child_tr->parent = Component_Ptr<Transform>(obj_id);
 }
 
-void Engine::Component::Transform::update_modelMatrix() {
+std::vector<Engine::Component::Component_Ptr<Engine::Component::Transform>>& Engine::Component::Transform::get_children() {
+	return children;
+}
+
+void Engine::Component::Transform::update_world_matrix() {
 	localMatrix = glm::translate(glm::mat4(1.0f), position);
 	glm::quat q(glm::radians(rotation));
-	glm::toMat4(glm::quat(glm::radians(rotation)));
-	localMatrix = glm::rotate(localMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
-	localMatrix = glm::rotate(localMatrix, glm::radians(rotation.y), glm::vec3(0, 1, 0));
-	localMatrix = glm::rotate(localMatrix, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+	localMatrix = localMatrix * glm::toMat4(glm::quat(glm::radians(rotation)));
 	localMatrix = glm::scale(localMatrix, scale);
 	if (parent) {
 		worldMatrix = parent->worldMatrix * localMatrix;

@@ -18,7 +18,7 @@ namespace Engine::Object {
 			auto tr_parent = this->get_component<Component::Transform>();
 			auto tr_child = child_object.get_component<Component::Transform>();
 			if (tr_parent && tr_child) {
-				tr_parent->add_child(tr_child, tr_parent);
+				tr_parent->add_child(tr_child);
 				return true;
 			}
 			return false;
@@ -27,13 +27,19 @@ namespace Engine::Object {
 			auto tr_parent = this->get_ui_component<UI::UI_Transform>();
 			auto tr_child = child_UI_object.get_ui_component<UI::UI_Transform>();
 			if (tr_parent && tr_child) {
-				tr_parent->add_child(tr_child, tr_parent);
+				tr_parent->add_child(tr_child);
 				return true;
 			}
 			return false;
 		}
 		void Destroy() {
 			Engine::Systems::DestroyedObjects::destroyed_objects.emplace_back(id);
+			auto transform = get_component<Component::Transform>();
+			if (transform) {
+				std::vector<Component::Component_Ptr<Component::Transform>>& children = transform->get_children();
+				for(auto& c : children)
+					Engine::Systems::DestroyedObjects::destroyed_objects.emplace_back(c.get_object_id());
+			}
 		}
 		//component methods
 		template<typename T, typename ... Args>

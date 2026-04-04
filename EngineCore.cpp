@@ -13,9 +13,6 @@ void EngineCore::main_init() {
 
 	init_UI_component_systems();
 
-	//textManager
-	textManager = std::make_unique<TextManager>(renderer);
-
 	//time manager
 	timeManager = std::make_unique<TimeManager>();
 
@@ -32,6 +29,11 @@ void EngineCore::main_init() {
 
 	texManager->create_texture_from_file("Resources/Textures/crate.jpg", false);
 	texManager->create_texture_from_file("Resources/Textures/stone.png", false);
+
+	//font manager
+
+	//simpleTextRenderer
+	simpleTextRenderer = std::make_unique<SimpleTextRenderer>(renderer);
 
 	//mesh manager
 	meshManager = MeshManager::get_Instance();
@@ -73,20 +75,21 @@ void EngineCore::test_method() {
 		"Resources/Models/1965_ac_shelby_cobra_427__www.vecarz.com.glb",
 		"Resources/Models/shelby_cobra_427.glb",
 		"Resources/Models/genshin_impact_-_furina.glb",
+		"Resources/Models/arknights_endfield_-yvonne-.glb",
 		"Resources/Models/simple_axe.glb"
 	};
 	modelManager->load_model(paths[3]);
 
 	///TEST
-	Engine::Object::object_ptr obj = objectManager->InstantiateObject();
-	auto playerController = obj->add_script<PlayerController>();
+	Engine::Object::object_ptr player_obj = objectManager->InstantiateObject();
+	auto playerController = player_obj->add_script<PlayerController>();
 
 	Engine::Object::object_ptr cameraObj;
 	cameraObj = objectManager->InstantiateObject();
 
-	auto c = cameraObj->add_component<Engine::Component::Camera>();
+	cameraMain = cameraObj->add_component<Engine::Component::Camera>();
 	camera_transform = cameraObj->add_component<Engine::Component::Transform>();
-	c->set_perspective(0.1f, 100.f);
+	cameraMain->set_perspective(0.1f, 100.f);
 	cameraManager->set_active_camera(cameraObj);
 
 	Engine::Object::object_ptr camera_holder_obj = objectManager->InstantiateObject();
@@ -99,27 +102,48 @@ void EngineCore::test_method() {
 	Engine::Component::component_ptr<Engine::Component::MeshComponent> child_mr = obj_child->add_component<Engine::Component::MeshComponent>();
 	child_mr->mesh = MeshManager::get_Instance()->get_mesh(1);
 
-	obj->add_child_object(*obj_child);*/
+	player_obj->add_child_object(*obj_child);*/
 
 	//canvas test
 	auto canvas_obj = objectManager->InstantiateObject();
-	auto canvas = canvas_obj->add_ui_component<Engine::UI::Canvas>();
 	canvas_obj->add_ui_component<Engine::UI::UI_Transform>();
+	auto canvas = canvas_obj->add_ui_component<Engine::UI::Canvas>();
 
-	auto image_obj = objectManager->InstantiateObject();
-	auto image_tr = image_obj->add_ui_component<Engine::UI::UI_Transform>();
-	auto image = image_obj->add_ui_component<Engine::UI::Image>();
-	image->set_sprite(&SpriteManager::get_Instance()->get(0));
-	image_tr->translateLocal(1.0f, 0.f, 0.f);
-	//image_tr->rotate(0, 0, 1, 30.0f);
-	//image->flipX(true);
+	auto button_obj = objectManager->InstantiateObject();
+	auto button_tr = button_obj->add_ui_component<Engine::UI::UI_Transform>();
+	auto button = button_obj->add_ui_component<Engine::UI::Button>();
+	button->set_sprite(SpriteManager::get_Instance()->get(0));
+	button->set_color(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+	button_tr->translateLocal(1.0f, 0.f, 0.f);
+	button_tr->set_size(1.0f, 0.1f);
+	
+	auto image_obj2 = objectManager->InstantiateObject();
+	auto image_tr2 = image_obj2->add_ui_component<Engine::UI::UI_Transform>();
+	auto image2 = image_obj2->add_ui_component<Engine::UI::Image>();
+	image2->set_sprite(&SpriteManager::get_Instance()->get(1));
+	//image2->set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	image_tr2->translateLocal(-1.0f, 0.f, 0.f);
 
-	playerController->set_test_image(image);
+	auto text_obj = objectManager->InstantiateObject();
+	auto text_tr = text_obj->add_ui_component<Engine::UI::UI_Transform>();
+	auto text = text_obj->add_ui_component<Engine::UI::SDF_Text>();
+	text->set_font(0);
+	text->set_height(0.1f);
+	text->set_text("Button");
+	text->set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	text_tr->translateLocal(0.0f, 0.0f, -0.001f);
+	text_tr->set_size(1.0f, 0.1f);
+	button_obj->add_child_UI_object(*text_obj);
 
-	canvas_obj->add_child_UI_object(*image_obj);
-	canvas->attach_ui_component<Engine::UI::Image>(image_obj.get_id());
+	canvas_obj->add_child_UI_object(*button_obj);
+	canvas_obj->add_child_UI_object(*image_obj2);
 
-	modelManager->create_model_object(0);
+	playerController->set_test_UI(image2, button, text);
+
+	auto scene_obj = modelManager->create_model_object(0);
+	auto scene_obj_tr = scene_obj->get_component<EC::Transform>();
+	playerController->set_test_transform(scene_obj_tr);
+	playerController->model = scene_obj;
 }
 
 void EngineCore::processMainLoop() {
@@ -140,6 +164,7 @@ void EngineCore::shutdown() {
 }
 
 void EngineCore::update() {
+	SystemContext::mouse.get_mouse_ortho_coords(SystemContext::screen);
 
 	timeManager->update();
 
@@ -160,38 +185,34 @@ void EngineCore::update() {
 	}
 
 	if (can_control_camera) {
+		float speed_m = TimeManager::deltaTime;
+		if (SystemContext::keyBoard.key_is_held(KeyLeftShift))
+			speed_m *= 5.0f;
+		//translate
 		if (SystemContext::keyBoard.key_is_held(KeyW)) {
-			camera_transform->translateDirectionally(0.f, 0.f, TimeManager::deltaTime);
+			camera_transform->translateDirectionallyZ(-speed_m);
 		}
 		if (SystemContext::keyBoard.key_is_held(KeyA)) {
-			camera_transform->translateDirectionally(-TimeManager::deltaTime, 0.f, 0.f);
+			camera_transform->translateDirectionallyX(-speed_m);
 		}
 		if (SystemContext::keyBoard.key_is_held(KeyS)) {
-			camera_transform->translateDirectionally(0.f, 0.f, -TimeManager::deltaTime);
+			camera_transform->translateDirectionallyZ(speed_m);
 		}
 		if (SystemContext::keyBoard.key_is_held(KeyD)) {
-			camera_transform->translateDirectionally(TimeManager::deltaTime, 0.f, 0.f);
+			camera_transform->translateDirectionallyX(speed_m);
 		}
-		if (SystemContext::keyBoard.key_is_held(GLFW_KEY_LEFT_SHIFT)) {
-			camera_transform->translateLocal(0.f, TimeManager::deltaTime, 0.f);
+		if (SystemContext::keyBoard.key_is_held(KeySpace)) {
+			camera_transform->translateLocal(0.f, speed_m, 0.f);
 		}
-		if (SystemContext::keyBoard.key_is_held(GLFW_KEY_LEFT_CONTROL)) {
-			camera_transform->translateLocal(0.f, -TimeManager::deltaTime, 0.f);
+		if (SystemContext::keyBoard.key_is_held(KeyLeftCtrl)) {
+			camera_transform->translateLocal(0.f, -speed_m, 0.f);
 		}
-
-		if (SystemContext::keyBoard.key_is_held(KeyLeft)) {
-			camera_transform->rotate(false, true, false, -TimeManager::deltaTime * 30.0f);
+		if (SystemContext::mouse.lb_is_held()) {
+			//rotate camera pitch
+			camera_transform->rotate(true, false, false, -0.1f * SystemContext::mouse.delta_y);
+			//rotate camera yaw
+			camera_transform->rotate(false, true, false, -0.1f * SystemContext::mouse.delta_x);
 		}
-		else if (SystemContext::keyBoard.key_is_held(KeyRight)) {
-			camera_transform->rotate(false, true, false, TimeManager::deltaTime * 30.0f);
-		}
-		else if (SystemContext::keyBoard.key_is_held(KeyUp)) {
-			camera_transform->rotate(true, false, false, -TimeManager::deltaTime * 30.0f);
-		}
-		else if (SystemContext::keyBoard.key_is_held(KeyDown)) {
-			camera_transform->rotate(true, false, false, TimeManager::deltaTime * 30.0f);
-		}
-
 	}
 }
 
@@ -204,30 +225,34 @@ void EngineCore::render() {
 
 	meshRenderer->render(renderer);
 
-	texManager->get(2)->bind();
+	texManager->get(3)->bind();
 	uiRenderer->render(renderer);
 
 	//// temporary text test
 	textBuilder.add_int(timeManager->get_current_FPS());
-	textManager->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-SystemContext::screen.ratio, 0.8f, 0.f), timeManager->getRainbowColor(), "Verdana");
+	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-SystemContext::screen.ratio, 0.8f, 0.f), timeManager->getRainbowColor(), 0);
 	textBuilder.reset();
 	//left button
 	if (SystemContext::mouse.lb_is_held()) {
-		textManager->add_text_to_buffer("left is held", 0.2f, glm::vec3(-1.5f, -0.8f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), "Verdana");
+		simpleTextRenderer->add_text_to_buffer("left is held", 0.2f, glm::vec3(-1.5f, -0.8f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
 	}
 	else if (SystemContext::mouse.lb_is_idle()) {
-		textManager->add_text_to_buffer("left is idle", 0.2f, glm::vec3(-1.5f, -0.8f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), "Verdana");
+		simpleTextRenderer->add_text_to_buffer("left is idle", 0.2f, glm::vec3(-1.5f, -0.8f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
 	}
 	//right button
 	if (SystemContext::mouse.rb_is_held()) {
-		textManager->add_text_to_buffer("right is held", 0.2f, glm::vec3(-1.5f, -0.6f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), "Verdana");
+		simpleTextRenderer->add_text_to_buffer("right is held", 0.2f, glm::vec3(-1.5f, -0.6f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
 	}
 	else if (SystemContext::mouse.rb_is_idle()) {
-		textManager->add_text_to_buffer("right is idle", 0.2f, glm::vec3(-1.5f, -0.6f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), "Verdana");
+		simpleTextRenderer->add_text_to_buffer("right is idle", 0.2f, glm::vec3(-1.5f, -0.6f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
 	}
-	
-	
-	textManager->render_buffered_text(renderer);
+	textBuilder.add_text("dX: ").add_float(SystemContext::mouse.delta_x);
+	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-1.5f, -0.4f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
+	textBuilder.reset();
+	textBuilder.add_text("dY: ").add_float(SystemContext::mouse.delta_y);
+	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-1.5f, -0.2f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
+	textBuilder.reset();
+	simpleTextRenderer->render_buffered_text(renderer);
 	////
 
 	renderer->present();
@@ -237,6 +262,8 @@ void EngineCore::input_endFrame() {
 	SystemContext::mouse.lb_prev = SystemContext::mouse.lb_curr;
 	SystemContext::mouse.rb_prev = SystemContext::mouse.rb_curr;
 	SystemContext::mouse.wheel_offset = 0;
+	SystemContext::mouse.delta_x = 0;
+	SystemContext::mouse.delta_y = 0;
 
 	for (int i = 0; i <= GLFW_KEY_LAST; i++) {
 		SystemContext::keyBoard.keyStatesPrev[i] = SystemContext::keyBoard.keyStatesCurr[i];
@@ -245,17 +272,19 @@ void EngineCore::input_endFrame() {
 
 void EngineCore::init_component_systems() {
 	compSysCore = ES::ComponentSystemsCore::get_Instance();
-	compSysCore->register_system<Engine::Component::Transform, ES::TransformSystem>();
-	compSysCore->register_system<Engine::Component::SpriteComponent, ES::SpriteComponentSystem>();
-	compSysCore->register_system<Engine::Component::MeshComponent, ES::MeshComponentSystem>();
-	compSysCore->register_system<Engine::Component::Camera, ES::CameraSystem>();
+	compSysCore->register_system<EC::Transform, ES::TransformSystem>();
+	compSysCore->register_system<EC::SpriteComponent, ES::SpriteComponentSystem>();
+	compSysCore->register_system<EC::MeshComponent, ES::MeshComponentSystem>();
+	compSysCore->register_system<EC::Camera, ES::CameraSystem>();
 }
 
 void EngineCore::init_UI_component_systems() {
 	uiCompSysCore = ES::UI_ComponentSystemsCore::get_Instance();
-	uiCompSysCore->register_system<Engine::UI::Canvas, ES::CanvasSystem>();
 	uiCompSysCore->register_system<Engine::UI::UI_Transform, ES::UI_TransformSystem>();
+	uiCompSysCore->register_system<Engine::UI::Canvas, ES::CanvasSystem>();
 	uiCompSysCore->register_system<Engine::UI::Image, ES::ImageSystem>();
+	uiCompSysCore->register_system<Engine::UI::Button, ES::ButtonSystem>();
+	uiCompSysCore->register_system<Engine::UI::SDF_Text, ES::SDF_TextSystem>();
 }
 
 void EngineCore::init_Graphic_API() {

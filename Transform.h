@@ -1,9 +1,6 @@
 #pragma once
 #include <cstdint>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <vector>
 #include "CompSystemsCore.h"
 
@@ -45,10 +42,10 @@ namespace Engine::Component {
 		void set_scale(float x, float y, float z);
 		void set_scale(glm::vec3& scale_vec);
 
-		void add_child(Component_Ptr<Transform>& child_tr, Component_Ptr<Transform>& parent_tr);
+		void add_child(Component_Ptr<Transform>& child_tr);
+		std::vector<Component_Ptr<Transform>>& get_children();
 		glm::vec3 position{ 0.f, 0.f, 0.f };
 		glm::vec3 rotation{ 0.f, 0.f, 0.f };
-		glm::quat quaternion{ 0.f, 0.f, 0.f, 0.f };
 		glm::vec3 scale{ 1.0f, 1.0f, 1.0f };
 	private:
 		glm::mat4 worldMatrix{ 1.0f };
@@ -56,7 +53,7 @@ namespace Engine::Component {
 		uint32_t obj_id = 0;
 		Component_Ptr<Transform> parent;
 		std::vector<Component_Ptr<Transform>> children;
-		void update_modelMatrix();
+		void update_world_matrix();
 		void update(const glm::mat4& worldMatrix);
 		void mark_dirty();
 		bool isDirty = false;

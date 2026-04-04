@@ -1,8 +1,11 @@
 #include "UI_Transform.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 Engine::UI::UI_Transform::UI_Transform(float x, float y, float z) {
 	position.x = x; position.y = y; position.z = z;
-	update_modelMatrix();
+	update_world_matrix();
 }
 
 void Engine::UI::UI_Transform::translateLocal(float x, float y, float z) {
@@ -56,31 +59,64 @@ void Engine::UI::UI_Transform::set_rotation(glm::vec3& rotate_vec) {
 	mark_dirty();
 }
 
-void Engine::UI::UI_Transform::set_scale(float x, float y, float z) {
-	scale.x = x; scale.y = y; scale.z = z;
+void Engine::UI::UI_Transform::set_scale(float x, float y) {
+	scale.x = x;
+	scale.y = y;
 	mark_dirty();
 }
 
-void Engine::UI::UI_Transform::set_scale(glm::vec3& scale_vec) {
-	scale.x = scale_vec.x; scale.y = scale_vec.y; scale.z = scale_vec.z;
+void Engine::UI::UI_Transform::set_scale(glm::vec2& scale_vec) {
+	scale.x = scale_vec.x;
+	scale.y = scale_vec.y;
 	mark_dirty();
 }
 
-void Engine::UI::UI_Transform::add_child(Engine::UI::UI_Component_Ptr<UI_Transform>& child_tr, Engine::UI::UI_Component_Ptr<UI_Transform>& parent_tr) {
+void Engine::UI::UI_Transform::set_size(float x, float y) {
+	size.x = x;
+	size.y = y;
+	mark_dirty();
+}
+
+void Engine::UI::UI_Transform::set_size(glm::vec2& size_vec) {
+	size.x = size_vec.x;
+	size.y = size_vec.y;
+	mark_dirty();
+}
+
+void Engine::UI::UI_Transform::set_pivot(float x, float y) {
+	pivot.x = x;
+	pivot.y = y;
+	mark_dirty();
+}
+
+void Engine::UI::UI_Transform::set_pivot(glm::vec2& pivot_vec) {
+	pivot.x = pivot_vec.x;
+	pivot.y = pivot_vec.y;
+	mark_dirty();
+}
+
+void Engine::UI::UI_Transform::add_child(Engine::UI::UI_Component_Ptr<UI_Transform>& child_tr) {
 	this->children.emplace_back(child_tr);
-	child_tr->parent = parent_tr;
+	child_tr->parent = UI_Component_Ptr<UI_Transform>(obj_id);
+}
+
+std::vector<Engine::UI::UI_Component_Ptr<Engine::UI::UI_Transform>>& Engine::UI::UI_Transform::get_children() {
+	return children;
+}
+
+glm::mat4 Engine::UI::UI_Transform::get_final_ui_matrix() const {
+	return glm::scale(this->worldMatrix, glm::vec3(size, 1.0f));
 }
 
 glm::mat4 Engine::UI::UI_Transform::get_world_matrix() const {
 	return this->worldMatrix;
 }
 
-void Engine::UI::UI_Transform::update_modelMatrix() {
+void Engine::UI::UI_Transform::update_world_matrix() {
 	localMatrix = glm::translate(glm::mat4(1.0f), position);
-	localMatrix = glm::rotate(localMatrix, glm::radians(rotation.z), glm::vec3(0, 0, 1));
-	localMatrix = glm::rotate(localMatrix, glm::radians(rotation.y), glm::vec3(0, 1, 0));
-	localMatrix = glm::rotate(localMatrix, glm::radians(rotation.x), glm::vec3(1, 0, 0));
-	localMatrix = glm::scale(localMatrix, scale);
+	glm::quat q(glm::radians(rotation));
+	localMatrix = localMatrix * glm::toMat4(glm::quat(glm::radians(rotation)));
+	localMatrix = glm::scale(localMatrix, glm::vec3(scale, 1.f));
 	if (parent) {
 		worldMatrix = parent->worldMatrix * localMatrix;
 	}

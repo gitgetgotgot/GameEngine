@@ -9,7 +9,7 @@
 
 #include "InputHandler.h"
 #include "TimeManager.h"
-#include "TextManager.h"
+#include "SimpleTextRenderer.h"
 #include "TextBufferBuilder.h"
 
 #include "ObjectManager.h"
@@ -21,6 +21,8 @@
 
 #include "UI_TransformSystem.h"
 #include "ImageSystem.h"
+#include "ButtonSystem.h"
+#include "SDF_TextSystem.h"
 
 namespace EC = Engine::Component;
 namespace ES = Engine::Systems;
@@ -61,7 +63,7 @@ private:
 	MeshManager* meshManager;
 	Engine::Models::ModelManager* modelManager;
 
-	std::unique_ptr<TextManager> textManager; //temporary
+	std::unique_ptr<SimpleTextRenderer> simpleTextRenderer; //temporary
 
 	//test
 	EC::Component_Ptr<EC::Camera> cameraMain;

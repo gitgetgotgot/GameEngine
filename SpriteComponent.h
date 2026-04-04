@@ -29,4 +29,3 @@ namespace Engine::Component {
 		uint32_t obj_id;
 	};
 }
-

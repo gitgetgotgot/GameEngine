@@ -7,21 +7,28 @@
 
 class UI_RenderManager;
 
+namespace Engine::Systems {
+	class CanvasSystem;
+}
+
 namespace Engine::UI {
-	struct Canvas {
+	class Canvas {
+		friend class Engine::Systems::CanvasSystem;
+	public:
 		friend class UI_RenderManager;
 		Canvas() {}
-		template<typename T>
-		void attach_ui_component(uint32_t obj_id);
-		void detach_ui_component(uint32_t obj_id);
 		bool isEnabled = true;
 	private:
-		void update_ui_data_buffer(std::vector<Engine::Systems::UI_InstanceData>& ui_data);
-		// vector here is essential for UI order in Canvas
-		std::vector<std::pair<uint32_t, Engine::Systems::UI_ISystem*>> comp_objects;
+		uint32_t obj_id{};
+		UI_Component_Ptr<UI_Transform> obj_transform;
+		void update_ui_data_buffer(
+			std::vector<Engine::Systems::UI_InstanceData>& ui_data,
+			std::vector<Engine::Systems::UI_InstanceData>& ui_text_data
+		);
+		void update_child(
+			UI_Component_Ptr<UI_Transform>& child_transform,
+			std::vector<Engine::Systems::UI_InstanceData>& ui_data,
+			std::vector<Engine::Systems::UI_InstanceData>& ui_text_data
+		);
 	};
-	template<typename T>
-	inline void Canvas::attach_ui_component(uint32_t obj_id) {
-		comp_objects.emplace_back(obj_id, Engine::Systems::UI_ComponentSystemsCore::get_Instance()->get_system_interface<T>());
-	}
 }

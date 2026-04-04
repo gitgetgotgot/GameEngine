@@ -78,6 +78,13 @@ enum Key : uint16_t {
     KeyLeft = GLFW_KEY_LEFT,
     KeyDown = GLFW_KEY_DOWN,
     KeyUp = GLFW_KEY_UP,
+    KeyLeftShift = GLFW_KEY_LEFT_SHIFT,
+    KeyLeftCtrl = GLFW_KEY_LEFT_CONTROL,
+    KeyLeftAlt = GLFW_KEY_LEFT_ALT,
+    KeyRightShift = GLFW_KEY_RIGHT_SHIFT,
+    KeyRightCtrl = GLFW_KEY_RIGHT_CONTROL,
+    KeyRightAlt = GLFW_KEY_RIGHT_ALT,
+    KeyCapsLock = GLFW_KEY_CAPS_LOCK,
 
     KeyF1 = GLFW_KEY_F1,
     KeyF2 = GLFW_KEY_F2,

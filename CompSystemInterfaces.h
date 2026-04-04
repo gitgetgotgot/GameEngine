@@ -36,16 +36,20 @@ namespace Engine::Systems {
 			modelMatrix = mat;
 			UV[0] = sprite.UV[0]; UV[1] = sprite.UV[1]; UV[2] = sprite.UV[2]; UV[3] = sprite.UV[3];
 		}
-		UI_InstanceData(const UI_InstanceData&) = default;
-		UI_InstanceData(UI_InstanceData&&) = default;
-		glm::mat4 modelMatrix{};
+		glm::mat4 modelMatrix{ 1.0f };
 		glm::vec2 UV[4]{};
-		glm::vec4 color{};
-		uint64_t handle{};
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		uint32_t texture_id{ 0 };
+		uint32_t padding[3]{};
+	};
+
+	enum UI_System_Type : uint8_t {
+		isNotText, isText
 	};
 
 	class UI_ISystem {
 	public:
+		UI_System_Type type = isNotText;
 		virtual ~UI_ISystem() {}
 		virtual void update() = 0;
 		virtual void update_ui_buffer_data(std::vector<UI_InstanceData>& ui_data, uint32_t obj_id) = 0;
@@ -60,6 +64,11 @@ namespace Engine::Systems {
 	};
 
 	class UI_ComponentSystemsCore;
+
+	class UI_Components_Data_Access {
+	public:
+		inline static std::unordered_map<uint32_t, Engine::Systems::UI_ISystem*> comp_objects;
+	};
 }
 
 namespace Engine::Component {
