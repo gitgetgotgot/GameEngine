@@ -47,7 +47,6 @@ private:
 	std::unique_ptr<StorageBuffer> storageBuffer;
 
 	sparse_set<SpriteInstanceData> spritesData;
-	//std::unordered_map<std::uint32_t, sparse_set<SpriteInstanceData>> spriteInstanceData;
 	SpriteRenderManager() {}
 	~SpriteRenderManager() {}
 };

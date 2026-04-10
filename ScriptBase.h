@@ -1,5 +1,5 @@
 #pragma once
-#include "ObjectPointer.h"
+#include "Object.h"
 #include "ScriptsMacros.h"
 
 namespace Engine::Object {

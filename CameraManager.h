@@ -1,7 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include "Transform.h"
-#include "ObjectPointer.h"
+#include "Object.h"
 
 class CameraManager {
 public:

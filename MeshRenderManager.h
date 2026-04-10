@@ -7,27 +7,16 @@
 
 constexpr uint32_t MAX_MESH_VERTEX_BUFFER_SIZE = 1'000'000;
 constexpr uint32_t MAX_MESH_INDEX_BUFFER_SIZE = 2'000'000;
-constexpr uint32_t MAX_MESH_INSTANCES = 2000;
+constexpr uint32_t MAX_SUBMESH_INSTANCES = 20000;
 constexpr uint32_t MAX_INDIRECT_COMMANDS = 2000;
 
 struct alignas(16) SubMeshInstanceData {
 	SubMeshInstanceData() {}
-	SubMeshInstanceData(
-		glm::mat4& model,
-		uint32_t& albedoID,
-		uint32_t& normalID,
-		uint32_t& roughnessID,
-		uint32_t& metallicID
-	) : modelMatrix{ model },
-		albedoID { albedoID },
-		normalID{ normalID },
-		roughnessID{ roughnessID },
-		metallicID{ metallicID } {}
-	glm::mat4 modelMatrix {}; // 64 bytes
-	uint32_t albedoID {};     // 4  bytes
-	uint32_t normalID {};     // 4  bytes
-	uint32_t roughnessID {};  // 4  bytes
-	uint32_t metallicID {};   // 4  bytes
+	SubMeshInstanceData(glm::mat4& model, uint32_t& materialID)
+		: modelMatrix{ model }, materialID{ materialID } {}
+	glm::mat4 modelMatrix{ 1.0f }; // 64 bytes
+	uint32_t materialID = 0;       // 4  bytes
+	uint32_t padding[3]{ 0 };      // 12 bytes
 };
 
 class MeshRenderManager {
@@ -55,7 +44,7 @@ private:
 	MeshManager* meshMgr = nullptr;
 	MaterialManager* matMgr = nullptr;
 	Engine::Systems::TransformSystem* trSystem = nullptr;
-	Engine::Systems::MeshComponentSystem* mrSystem = nullptr;
+	Engine::Systems::MeshComponentSystem* mcSystem = nullptr;
 
 	std::unique_ptr<Shader> shader;
 	BasicShaderUBData basicUniformData;
@@ -66,10 +55,12 @@ private:
 	std::unique_ptr<StorageBuffer> storageBuffer;
 	std::unique_ptr<IndirectBuffer> indirectBuffer;
 
-	sparse_set<SubMeshInstanceData> meshesInstanceData;
+	std::vector<SubMeshInstanceData> submeshesData;
 	uint32_t index_current_global_size = 0;
 	uint32_t vertex_current_global_size = 0;
 	std::vector<DrawElementsIndirectCommand> drawCommands;
+	std::vector<std::pair<uint32_t, bool>> submeshOffsets;
+	bool submesh_inst_key = false;
 	MeshRenderManager() {}
 	~MeshRenderManager() {}
 };

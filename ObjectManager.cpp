@@ -8,25 +8,19 @@ void Engine::Object::ObjectManager::DestroyObject(object_ptr& object) {
 	Engine::Systems::DestroyedObjects::destroyed_objects.emplace_back(object.get_id());
 }
 
-void Engine::Object::ObjectManager::Update() {
+void Engine::Object::ObjectManager::_internal_init() {
+	object_ptr::object_manager_ptr = get_Instance();
+}
+
+void Engine::Object::ObjectManager::_internal_update() {
 	if (Engine::Systems::DestroyedObjects::destroyed_objects.size()) {
 		for (auto& obj_id : Engine::Systems::DestroyedObjects::destroyed_objects) {
-			//remove script (just one for now)
-			scripts.remove(obj_id);
-			//ADD OnDestroy here...
-			std::cout << "\t---Script (id = " << obj_id << ") removed---" << std::endl;
-			scripts_with_Update.clear(); //clear all for now
-			//remove object
-			objects.remove(obj_id);
-			std::cout << "\t---Object (id = " << obj_id << ") removed---" << std::endl;
+			if (objects.remove(obj_id)) {
+				free_ids.emplace_back(obj_id);
+				std::cout << "[ObjectManager]: Object(" << obj_id << ") removed" << std::endl;
+			}
 		}
-		Engine::Systems::DestroyedObjects::destroyed_objects.clear();
-	}
-	for (auto& script : scripts_with_Update) {
-		script->Update();
-	}
-	for (auto& script : scripts_with_LateUpdate) {
-		script->LateUpdate();
+
 	}
 }
 

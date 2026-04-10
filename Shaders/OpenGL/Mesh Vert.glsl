@@ -5,10 +5,7 @@ layout (location = 2) in vec2 _uv;
 
 struct SubMeshInstanceData {
 	mat4 modelMatrix;  // 64 bytes
-	uint albedoID;     // 4 bytes
-	uint normalID;     // 4 bytes
-	uint roughnessID;  // 4 bytes
-	uint metallicID;   // 4 bytes
+	uint materialID;   // 4 bytes
 };
 
 layout (std140, binding = 1) uniform UBO {
@@ -22,7 +19,7 @@ layout (std430, binding = 1) buffer MeshInstanceData {
 
 out vec2 uv;
 out vec3 normal;
-flat out uint albedo_ID;
+flat out uint material_ID;
 
 void main()
 {
@@ -32,5 +29,5 @@ void main()
 	uv = _uv;
 	//normal = _normal;
 	normal = normalize(mat3(model) * _normal);
-	albedo_ID = submeshesData[gl_InstanceID + gl_BaseInstance].albedoID;
+	material_ID = submeshesData[gl_InstanceID + gl_BaseInstance].materialID;
 }

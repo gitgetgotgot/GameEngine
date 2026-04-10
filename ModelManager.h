@@ -48,13 +48,6 @@ namespace Engine::Models {
 		//creates a model object and returns root object_ptr
 		Engine::Object::object_ptr create_model_object(uint32_t model_id);
 	private:
-		Mesh& create_mesh_from_model(
-			const tinygltf::Model& model,
-			const tinygltf::Mesh& mesh,
-			std::vector<uint32_t>& meshes_indices,
-			std::vector<SubMeshVertex>& meshes_vertices,
-			std::vector<SubMesh>& submeshes
-		);
 		ModelManager() {}
 		~ModelManager() {}
 		sparse_set<Model> models;

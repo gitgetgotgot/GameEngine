@@ -159,9 +159,6 @@
     <ClCompile Include="CameraSystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectPointer.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="CameraManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -220,6 +217,12 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="FontManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -341,9 +344,6 @@
     <ClInclude Include="MeshComponent.h">
       <Filter>Файлы заголовков\Objects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="MeshManager.h">
-      <Filter>Файлы заголовков\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="MeshComponentSystem.h">
       <Filter>Файлы заголовков\Objects\ComponentSystem</Filter>
     </ClInclude>
@@ -364,9 +364,6 @@
     </ClInclude>
     <ClInclude Include="SparseSet.h">
       <Filter>Файлы заголовков\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectPointer.h">
-      <Filter>Файлы заголовков\Objects</Filter>
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>Файлы заголовков\Objects</Filter>
@@ -429,6 +426,9 @@
       <Filter>Файлы заголовков\UI\Text</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

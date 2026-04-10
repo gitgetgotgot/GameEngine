@@ -160,8 +160,8 @@
     <ClCompile Include="MeshComponentSystem.cpp" />
     <ClCompile Include="MeshRenderManager.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="ObjectPointer.cpp" />
     <ClCompile Include="OpenGL_IndexBuffer.cpp" />
     <ClCompile Include="OpenGL_IndirectBuffer.cpp" />
     <ClCompile Include="OpenGL_Renderer.cpp" />
@@ -172,6 +172,7 @@
     <ClCompile Include="OpenGL_VertexArray.cpp" />
     <ClCompile Include="OpenGL_VertexBuffer.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="ScriptManager.cpp" />
     <ClCompile Include="SDF_Text.cpp" />
     <ClCompile Include="SDF_TextSystem.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -217,7 +218,6 @@
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="ObjectPointer.h" />
     <ClInclude Include="OpenGL_IndirectBuffer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScriptManager.h" />

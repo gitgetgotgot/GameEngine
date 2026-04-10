@@ -33,7 +33,7 @@ void UI_RenderManager::init(std::unique_ptr<Engine::Graphics::RendererInterface>
 	storageBuffer->setData(nullptr, sizeof(Engine::Systems::UI_InstanceData) * MAX_UI_ELEMENTS);
 
 	storageTextBuffer = renderer->createStorageBuffer();
-	storageTextBuffer->bind(4);
+	storageTextBuffer->bind(5);
 	storageTextBuffer->setData(nullptr, sizeof(Engine::Systems::UI_InstanceData) * MAX_TEXT_SYMBOLS);
 
 	uiData.reserve(MAX_UI_ELEMENTS);

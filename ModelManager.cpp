@@ -26,7 +26,7 @@ void Engine::Models::ModelManager::load_plane_mesh() {
     submesh.indexCount = indices.size();
     SubMesh& newSubMesh = SubMeshManager::get_Instance()->add(std::move(submesh));
     Mesh mesh;
-    mesh.subMeshes.emplace_back(newSubMesh.id);
+    mesh.subMeshes.emplace_back(newSubMesh.id, defaultMaterialID);
     MeshManager::get_Instance()->add_mesh(std::move(mesh));
     MeshRenderManager::get_Instance()->load_submesh(indices, vertices, submesh);
 }
@@ -83,7 +83,7 @@ void Engine::Models::ModelManager::load_cube_mesh() {
     submesh.indexCount = indices.size();
     SubMesh& newSubMesh = SubMeshManager::get_Instance()->add(std::move(submesh));
     Mesh mesh;
-    mesh.subMeshes.emplace_back(newSubMesh.id);
+    mesh.subMeshes.emplace_back(newSubMesh.id, defaultMaterialID);
     MeshManager::get_Instance()->add_mesh(std::move(mesh));
     MeshRenderManager::get_Instance()->load_submesh(indices, vertices, submesh);
 }
@@ -124,7 +124,7 @@ void Engine::Models::ModelManager::load_pyramid_mesh() {
     submesh.indexCount = indices.size();
     SubMesh& newSubMesh = SubMeshManager::get_Instance()->add(std::move(submesh));
     Mesh mesh;
-    mesh.subMeshes.emplace_back(newSubMesh.id);
+    mesh.subMeshes.emplace_back(newSubMesh.id, defaultMaterialID);
     MeshManager::get_Instance()->add_mesh(std::move(mesh));
     MeshRenderManager::get_Instance()->load_submesh(indices, vertices, submesh);
 }
@@ -182,7 +182,7 @@ void Engine::Models::ModelManager::load_cylinder_mesh() {
     submesh.indexCount = indices.size();
     SubMesh& newSubMesh = SubMeshManager::get_Instance()->add(std::move(submesh));
     Mesh mesh;
-    mesh.subMeshes.emplace_back(newSubMesh.id);
+    mesh.subMeshes.emplace_back(newSubMesh.id, defaultMaterialID);
     MeshManager::get_Instance()->add_mesh(std::move(mesh));
     MeshRenderManager::get_Instance()->load_submesh(indices, vertices, submesh);
 }
@@ -288,7 +288,6 @@ void Engine::Models::ModelManager::load_model(std::string& path) {
             submeshes_indices.insert(submeshes_indices.end(), indices.begin(), indices.end());
             submeshes_vertices.insert(submeshes_vertices.end(), vertices.begin(), vertices.end());
             submeshes.emplace_back(newSubmesh);
-            newMesh.subMeshes.emplace_back(newSubmesh.id);
 
             //MATERIAL AND TEXTURES
             int materialID = primitive.material;
@@ -300,9 +299,6 @@ void Engine::Models::ModelManager::load_model(std::string& path) {
                 }
                 else {
                     //CREATE NEW MATERIAL
-                    Material& newMaterial = materialMgr->add_material();
-                    materials_cache.emplace(materialID, newMaterial.id);
-                    newSubmesh.material_id = newMaterial.id;
                     //IF NEW MATERIAL IS CREATED, THEN CHECK AND CREATE MISSING TEXTURES
                     const tinygltf::Material& mat = model.materials[materialID];
                     int baseColorTextureID = mat.pbrMetallicRoughness.baseColorTexture.index;
@@ -348,9 +344,13 @@ void Engine::Models::ModelManager::load_model(std::string& path) {
                     };
 
                     //add base color (albedo) texture of this material if not exists yet
-                    newMaterial.albedoID = process_texture(baseColorTextureID);
+                    uint32_t albedoID = process_texture(baseColorTextureID);
+                    Material& newMaterial = materialMgr->add_material(albedoID);
+                    materials_cache.emplace(materialID, newMaterial.id);
+                    newSubmesh.material_id = newMaterial.id;
                 }
             }
+            newMesh.subMeshes.emplace_back(std::make_pair(newSubmesh.id, newSubmesh.material_id));
         }
         return newMesh.id;
     };
@@ -449,106 +449,4 @@ Engine::Object::object_ptr Engine::Models::ModelManager::create_model_object(uin
     }
 
     return root;
-}
-
-Mesh& Engine::Models::ModelManager::create_mesh_from_model(
-    const tinygltf::Model& model,
-    const tinygltf::Mesh& mesh,
-    std::vector<uint32_t>& meshes_indices,
-    std::vector<SubMeshVertex>& meshes_vertices,
-    std::vector<SubMesh>& submeshes
-) {
-    Mesh& newMesh = meshManager->add_mesh(Mesh{});
-    for (const auto& primitive : mesh.primitives) {
-        //indices
-        const tinygltf::Accessor& indexAccessor = model.accessors[primitive.indices];
-        const tinygltf::BufferView& indexView = model.bufferViews[indexAccessor.bufferView];
-        const tinygltf::Buffer& indexBuffer = model.buffers[indexView.buffer];
-
-        const void* indexData = &indexBuffer.data[indexView.byteOffset + indexAccessor.byteOffset];
-        size_t indexCount = indexAccessor.count;
-
-        std::vector<uint32_t> indices(indexCount);
-
-        if (indexAccessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
-        {
-            const uint16_t* src = (const uint16_t*)indexData;
-            for (size_t i = 0; i < indexCount; i++)
-                indices[i] = src[i];
-        }
-        else if (indexAccessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
-        {
-            const uint32_t* src = (const uint32_t*)indexData;
-            for (size_t i = 0; i < indexCount; i++)
-                indices[i] = src[i];
-        }
-
-        //vertices
-        std::vector<SubMeshVertex> vertices;
-
-        const auto& posAccessor = model.accessors[primitive.attributes.at("POSITION")];
-        const auto& posView = model.bufferViews[posAccessor.bufferView];
-        const auto& posBuffer = model.buffers[posView.buffer];
-
-        const float* posData = (const float*)&posBuffer.data[posView.byteOffset + posAccessor.byteOffset];
-
-        const float* normalData = nullptr;
-        const float* uvData = nullptr;
-
-        if (primitive.attributes.count("NORMAL"))
-        {
-            const auto& acc = model.accessors[primitive.attributes.at("NORMAL")];
-            const auto& view = model.bufferViews[acc.bufferView];
-            const auto& buf = model.buffers[view.buffer];
-            normalData = (const float*)&buf.data[view.byteOffset + acc.byteOffset];
-        }
-
-        if (primitive.attributes.count("TEXCOORD_0"))
-        {
-            const auto& acc = model.accessors[primitive.attributes.at("TEXCOORD_0")];
-            const auto& view = model.bufferViews[acc.bufferView];
-            const auto& buf = model.buffers[view.buffer];
-            uvData = (const float*)&buf.data[view.byteOffset + acc.byteOffset];
-        }
-
-        vertices.resize(posAccessor.count);
-
-        for (size_t i = 0; i < posAccessor.count; i++)
-        {
-            vertices[i].pos[0] = posData[i * 3 + 0];
-            vertices[i].pos[1] = posData[i * 3 + 1];
-            vertices[i].pos[2] = posData[i * 3 + 2];
-
-            if (normalData)
-            {
-                vertices[i].normal[0] = normalData[i * 3 + 0];
-                vertices[i].normal[1] = normalData[i * 3 + 1];
-                vertices[i].normal[2] = normalData[i * 3 + 2];
-            }
-
-            if (uvData)
-            {
-                vertices[i].UV[0] = uvData[i * 2 + 0];
-                vertices[i].UV[1] = uvData[i * 2 + 1];
-            }
-        }
-        //submesh data setup
-        SubMesh submesh;
-        submesh.vertexCount = vertices.size();
-        submesh.indexCount = indices.size();
-        SubMesh& newSubmesh = subMeshManager->add(std::move(submesh));
-        
-        meshes_indices.insert(meshes_indices.end(), indices.begin(), indices.end());
-        meshes_vertices.insert(meshes_vertices.end(), vertices.begin(), vertices.end());
-        submeshes.emplace_back(newSubmesh);
-        newMesh.subMeshes.emplace_back(newSubmesh.id);
-
-        //material and textures
-        int materialID = primitive.material;
-        if (materialID < 0) newSubmesh.material_id = 0; //default
-        else {
-            
-        }
-    }
-    return newMesh;
 }

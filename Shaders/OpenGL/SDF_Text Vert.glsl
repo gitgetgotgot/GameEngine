@@ -17,7 +17,7 @@ struct UI_Instance {
 	uint texture_id;
 };
 
-layout (std430, binding = 4) buffer UI_InstanceData {
+layout (std430, binding = 5) buffer UI_InstanceData {
 	UI_Instance uiData[];
 };
 

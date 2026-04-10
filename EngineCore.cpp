@@ -24,6 +24,10 @@ void EngineCore::main_init() {
 	texManager = TextureManager::get_Instance();
 	texManager->init(renderer);
 
+	//material manager
+	matManager = MaterialManager::get_Instance();
+	matManager->init(renderer);
+
 	texManager->create_texture_from_file("Resources/Textures/default.png", false); //default texture
 	MaterialManager::get_Instance()->add_material(); //default material
 
@@ -57,6 +61,11 @@ void EngineCore::main_init() {
 	
 	//object manager
 	objectManager = Engine::Object::ObjectManager::get_Instance();
+	objectManager->_internal_init();
+
+	//script manager
+	scriptManager = Engine::Object::ScriptManager::get_Instance();
+	scriptManager->_internal_init();
 
 	//model manager
 	modelManager = Engine::Models::ModelManager::get_Instance();
@@ -94,7 +103,7 @@ void EngineCore::test_method() {
 
 	Engine::Object::object_ptr camera_holder_obj = objectManager->InstantiateObject();
 	camera_transform = camera_holder_obj->add_component<Engine::Component::Transform>();
-	camera_holder_obj->add_child_object(*cameraObj);
+	camera_holder_obj->add_child_object(cameraObj);
 
 	/*Engine::Object::object_ptr obj_child = objectManager->InstantiateObject();
 	Engine::Component::component_ptr<Engine::Component::Transform> child_tr = obj_child->add_component<Engine::Component::Transform>();
@@ -121,7 +130,6 @@ void EngineCore::test_method() {
 	auto image_tr2 = image_obj2->add_ui_component<Engine::UI::UI_Transform>();
 	auto image2 = image_obj2->add_ui_component<Engine::UI::Image>();
 	image2->set_sprite(&SpriteManager::get_Instance()->get(1));
-	//image2->set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	image_tr2->translateLocal(-1.0f, 0.f, 0.f);
 
 	auto text_obj = objectManager->InstantiateObject();
@@ -133,10 +141,10 @@ void EngineCore::test_method() {
 	text->set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	text_tr->translateLocal(0.0f, 0.0f, -0.001f);
 	text_tr->set_size(1.0f, 0.1f);
-	button_obj->add_child_UI_object(*text_obj);
+	button_obj->add_child_UI_object(text_obj);
 
-	canvas_obj->add_child_UI_object(*button_obj);
-	canvas_obj->add_child_UI_object(*image_obj2);
+	canvas_obj->add_child_UI_object(button_obj);
+	canvas_obj->add_child_UI_object(image_obj2);
 
 	playerController->set_test_UI(image2, button, text);
 
@@ -144,6 +152,16 @@ void EngineCore::test_method() {
 	auto scene_obj_tr = scene_obj->get_component<EC::Transform>();
 	playerController->set_test_transform(scene_obj_tr);
 	playerController->model = scene_obj;
+
+	//spawn N * M models
+	int M = 4, N = 4;
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < N; j++) {
+			auto scene_obj = modelManager->create_model_object(0);
+			auto scene_obj_tr = scene_obj->get_component<EC::Transform>();
+			scene_obj_tr->translateLocal(-10.0f + i * 1.3f, 0.0f, -1.3f * j);
+		}
+	}
 }
 
 void EngineCore::processMainLoop() {
@@ -178,7 +196,8 @@ void EngineCore::update() {
 	meshRenderer->update(cameraManager->get_active_camera());
 	uiRenderer->update();
 
-	objectManager->Update();
+	objectManager->_internal_update();
+	scriptManager->_internal_update();
 
 	if (SystemContext::keyBoard.key_is_pressed(GLFW_KEY_C)) {
 		can_control_camera = !can_control_camera;
@@ -217,7 +236,7 @@ void EngineCore::update() {
 }
 
 void EngineCore::render() {
-	renderer->clear(0.f, 0.f, 0.f);
+	renderer->clear(0.2f, 0.2f, 0.2f);
 	
 	//texManager->get(1)->bind();
 
@@ -304,7 +323,7 @@ void EngineCore::init_Graphic_API() {
 		glfwSetWindowAspectRatio(window, 16, 9);
 		//glad
 		gladLoadGL();
-		//glfwSwapInterval(0);
+		glfwSwapInterval(0);
 	}
 	else if (render_api == RENDER_API::DirectX_API) {
 		//renderer = std::make_unique<DirectX_Renderer>();

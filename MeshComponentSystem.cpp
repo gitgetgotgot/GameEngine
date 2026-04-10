@@ -2,6 +2,7 @@
 
 void Engine::Systems::MeshComponentSystem::add_component(Engine::Component::MeshComponent&& comp, uint32_t obj_id) {
 	comp.obj_id = obj_id;
+	comp.transform_ptr = Component::Component_Ptr<Component::Transform>(obj_id);
 	meshComponents.add(std::move(comp), obj_id);
 	MeshUpdater::addedMeshes.emplace_back(obj_id);
 }

@@ -5,7 +5,7 @@ struct Mesh {
 	Mesh() {}
 	Mesh(uint32_t id) : id{ id } {}
 	uint32_t id{};
-	std::vector<uint32_t> subMeshes;
+	std::vector<std::pair<uint32_t/*submesh ID*/, uint32_t/*submesh material ID*/>> subMeshes;
 };
 
 class MeshManager {

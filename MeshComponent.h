@@ -1,6 +1,7 @@
 #pragma once
 #include "MeshManager.h"
 #include "CompSystemsCore.h"
+#include "Transform.h"
 
 namespace Engine::Systems {
 	class MeshComponentSystem;
@@ -27,5 +28,6 @@ namespace Engine::Component {
 		uint32_t mesh_id{};
 	private:
 		uint32_t obj_id{};
+		Component_Ptr<Component::Transform> transform_ptr;
 	};
 }
