@@ -9,6 +9,7 @@ void InputHandler::setGLFWwindowCallbacks(GLFWwindow* window) {
 }
 
 void InputHandler::glfwWindowSizeCallback(GLFWwindow* window, int width, int height) {
+	WindowResizeAccess::window_is_resized = true;
 	SystemContext::screen.update_resolution(width, height);
 	glViewport(0, 0, width, height);
 }

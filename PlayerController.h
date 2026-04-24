@@ -20,7 +20,8 @@ public:
 	void set_test_UI(
 		EUI::UI_Component_Ptr<EUI::Image>& img_ptr,
 		EUI::UI_Component_Ptr<EUI::Button>& button_ptr,
-		EUI::UI_Component_Ptr<EUI::SDF_Text>& text_ptr
+		EUI::UI_Component_Ptr<EUI::SDF_Text>& text_ptr,
+		EUI::UI_Component_Ptr<EUI::UI_Transform>& text_transform
 	);
 	void set_test_transform(EC::Component_Ptr<EC::Transform>& tr_ptr);
 	Engine::Object::object_ptr model;
@@ -35,6 +36,7 @@ private:
 	EUI::UI_Component_Ptr<EUI::Image> image;
 	EUI::UI_Component_Ptr<EUI::Button> button;
 	EUI::UI_Component_Ptr<EUI::SDF_Text> text;
+	EUI::UI_Component_Ptr<EUI::UI_Transform> text_transform;
 	bool canControl = false;
 	float cameraRotateSpeed = 30.0f;
 	bool color_changed = false;

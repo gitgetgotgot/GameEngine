@@ -13,6 +13,11 @@ inline std::unordered_map<int, char> shiftKeyMap = {
 	{GLFW_KEY_COMMA, '<'}, {GLFW_KEY_PERIOD, '>'}, {GLFW_KEY_SLASH, '?'}
 };
 
+class WindowResizeAccess {
+public:
+	inline static bool window_is_resized = false;
+};
+
 class InputHandler {
 public:
 	static void setGLFWwindowCallbacks(GLFWwindow* window);

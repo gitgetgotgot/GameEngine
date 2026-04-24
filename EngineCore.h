@@ -9,7 +9,7 @@
 
 #include "InputHandler.h"
 #include "TimeManager.h"
-#include "SimpleTextRenderer.h"
+//#include "SimpleTextRenderer.h"
 #include "TextBufferBuilder.h"
 
 #include "ObjectManager.h"
@@ -66,7 +66,7 @@ private:
 	MeshManager* meshManager = nullptr;
 	Engine::Models::ModelManager* modelManager = nullptr;
 
-	std::unique_ptr<SimpleTextRenderer> simpleTextRenderer; //temporary
+	//std::unique_ptr<SimpleTextRenderer> simpleTextRenderer; //temporary
 
 	//test
 	EC::Component_Ptr<EC::Camera> cameraMain;

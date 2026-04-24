@@ -23,6 +23,7 @@ void main()
 	float thickness = 1.f;
 	float bias = -0.15f;
 
+	/*
 	vec3 glowColor = vec3(0.9, 0.9, 1.0); // цвет свечения
 	float glowSize = 0.3;                // радиус свечения
 	float glowIntensity = 1.0;            // яркость свечения
@@ -47,9 +48,36 @@ void main()
 	vec3 finalColor = mix(outlineColor, textColor.rgb, alpha);
 	fragColor = vec4(finalColor, max(alpha, outline));
 	//fragColor = vec4(textColor.rgb, alpha);
+	*/
 
 	/*
+	float outlineWidth = 0.0f;
+	vec3 outlineColor = vec3(0.0, 0.0, 0.0);
 
+	sampler2D tex0 = sampler2D(texHandles[texture_ID]);
+
+	float sd = texture(tex0, texCoords).r;
+	float edge = 0.01f;
+	float d = abs(sd - 0.5);
+	float outline = 1.0 - smoothstep(outlineWidth, outlineWidth + edge, d);
+
+	float alpha = smoothstep(0.5 - edge, 0.5 + edge, sd);
+	float finalAlpha = max(alpha, outline);
+	if (finalAlpha == 0.0) discard;
+	vec3 final_color = mix(outlineColor, textColor.rgb, alpha);
+	final_color = mix(final_color, outlineColor, outline);
+
+	fragColor = vec4(final_color, finalAlpha);
+	*/
+
+	sampler2D tex0 = sampler2D(texHandles[texture_ID]);
+	float sd = texture(tex0, texCoords).r;
+	float edge = 0.01f;
+	float alpha = smoothstep(0.5 - edge, 0.5 + edge, sd);
+	if (alpha == 0.0) discard;
+	fragColor = vec4(textColor.rgb, alpha);
+
+	/*
 	// тень (смещённые координаты)
     float sdfShadow = texture(tex0, texCoords + shadowOffset).r;
     float distShadow = sdfShadow - 0.5;

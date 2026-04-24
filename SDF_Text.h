@@ -26,7 +26,7 @@ namespace Engine::UI {
 	public:
 		std::string text;
 		glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
-		float height = 0.25f;
+		float font_size = 0.25f;
 		TextHorizontalAlignment horizAlign = TextHorizontalAlignment::horizLeft;
 		TextVerticalAlignment vertAlign = TextVerticalAlignment::vertCenter;
 		void set_horiz_align(TextHorizontalAlignment type);

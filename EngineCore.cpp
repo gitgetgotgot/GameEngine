@@ -8,7 +8,7 @@ void EngineCore::main_init() {
 	init_Graphic_API();
 
 	init_Input_Handler();
-	
+
 	init_component_systems();
 
 	init_UI_component_systems();
@@ -35,9 +35,10 @@ void EngineCore::main_init() {
 	texManager->create_texture_from_file("Resources/Textures/stone.png", false);
 
 	//font manager
+	fontManager = FontManager::get_Instance();
 
 	//simpleTextRenderer
-	simpleTextRenderer = std::make_unique<SimpleTextRenderer>(renderer);
+	//simpleTextRenderer = std::make_unique<SimpleTextRenderer>(renderer);
 
 	//mesh manager
 	meshManager = MeshManager::get_Instance();
@@ -58,7 +59,7 @@ void EngineCore::main_init() {
 	//UI renderer
 	uiRenderer = UI_RenderManager::get_Instance();
 	uiRenderer->init(renderer);
-	
+
 	//object manager
 	objectManager = Engine::Object::ObjectManager::get_Instance();
 	objectManager->_internal_init();
@@ -74,7 +75,22 @@ void EngineCore::main_init() {
 	modelManager->load_cube_mesh();
 	modelManager->load_pyramid_mesh();
 	modelManager->load_cylinder_mesh();
+
+	//generate font
+	std::string font_path = baseFontsDirectory;
+	font_path += "minecraft_font.ttf";
+	//bool success = fontManager->generate_truetype_sdf_font(font_path.c_str(), true);
 	
+	//load fonts
+	std::string sdf_font_path = SDFFontAtlasesDirectory;
+	std::string font_name[] = { "minecraft_font_SDF", "times_SDF", "cour_SDF" };
+	sdf_font_path = SDFFontAtlasesDirectory + font_name[0];
+	fontManager->load_sdf_font(sdf_font_path.c_str(), font_name[0]);
+	sdf_font_path = SDFFontAtlasesDirectory + font_name[1];
+	fontManager->load_sdf_font(sdf_font_path.c_str(), font_name[1]);
+	sdf_font_path = SDFFontAtlasesDirectory + font_name[2];
+	fontManager->load_sdf_font(sdf_font_path.c_str(), font_name[2]);
+
 	test_method();
 }
 
@@ -123,30 +139,31 @@ void EngineCore::test_method() {
 	auto button = button_obj->add_ui_component<Engine::UI::Button>();
 	button->set_sprite(SpriteManager::get_Instance()->get(0));
 	button->set_color(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-	button_tr->translateLocal(1.0f, 0.f, 0.f);
-	button_tr->set_size(1.0f, 0.1f);
+	button_tr->translateLocal(0.f, 0.f, 0.f);
+	button_tr->set_size(1.0f, 1.0f);
 	
 	auto image_obj2 = objectManager->InstantiateObject();
 	auto image_tr2 = image_obj2->add_ui_component<Engine::UI::UI_Transform>();
 	auto image2 = image_obj2->add_ui_component<Engine::UI::Image>();
 	image2->set_sprite(&SpriteManager::get_Instance()->get(1));
-	image_tr2->translateLocal(-1.0f, 0.f, 0.f);
+	image_tr2->translateLocal(-1.5f, 0.f, 0.f);
+	image_tr2->set_scale(0.5, 0.5);
 
 	auto text_obj = objectManager->InstantiateObject();
 	auto text_tr = text_obj->add_ui_component<Engine::UI::UI_Transform>();
 	auto text = text_obj->add_ui_component<Engine::UI::SDF_Text>();
 	text->set_font(0);
-	text->set_height(0.1f);
-	text->set_text("Button");
+	text->set_height(0.3f);
+	text->set_text("/time set day");
 	text->set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	text_tr->translateLocal(0.0f, 0.0f, -0.001f);
-	text_tr->set_size(1.0f, 0.1f);
+	text_tr->set_size(1.0f, 1.0f);
 	button_obj->add_child_UI_object(text_obj);
 
 	canvas_obj->add_child_UI_object(button_obj);
 	canvas_obj->add_child_UI_object(image_obj2);
 
-	playerController->set_test_UI(image2, button, text);
+	playerController->set_test_UI(image2, button, text, text_tr);
 
 	auto scene_obj = modelManager->create_model_object(0);
 	auto scene_obj_tr = scene_obj->get_component<EC::Transform>();
@@ -154,7 +171,7 @@ void EngineCore::test_method() {
 	playerController->model = scene_obj;
 
 	//spawn N * M models
-	int M = 4, N = 4;
+	int M = 0, N = 0;
 	for (int i = 0; i < M; i++) {
 		for (int j = 0; j < N; j++) {
 			auto scene_obj = modelManager->create_model_object(0);
@@ -244,35 +261,15 @@ void EngineCore::render() {
 
 	meshRenderer->render(renderer);
 
-	texManager->get(3)->bind();
 	uiRenderer->render(renderer);
 
-	//// temporary text test
-	textBuilder.add_int(timeManager->get_current_FPS());
+	/*textBuilder.add_int(timeManager->get_current_FPS());
 	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-SystemContext::screen.ratio, 0.8f, 0.f), timeManager->getRainbowColor(), 0);
 	textBuilder.reset();
-	//left button
-	if (SystemContext::mouse.lb_is_held()) {
-		simpleTextRenderer->add_text_to_buffer("left is held", 0.2f, glm::vec3(-1.5f, -0.8f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
-	}
-	else if (SystemContext::mouse.lb_is_idle()) {
-		simpleTextRenderer->add_text_to_buffer("left is idle", 0.2f, glm::vec3(-1.5f, -0.8f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
-	}
-	//right button
-	if (SystemContext::mouse.rb_is_held()) {
-		simpleTextRenderer->add_text_to_buffer("right is held", 0.2f, glm::vec3(-1.5f, -0.6f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
-	}
-	else if (SystemContext::mouse.rb_is_idle()) {
-		simpleTextRenderer->add_text_to_buffer("right is idle", 0.2f, glm::vec3(-1.5f, -0.6f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
-	}
-	textBuilder.add_text("dX: ").add_float(SystemContext::mouse.delta_x);
-	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-1.5f, -0.4f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
+	textBuilder.add_text("Text123");
+	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.7f, glm::vec3(-1.6f, -0.9f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
 	textBuilder.reset();
-	textBuilder.add_text("dY: ").add_float(SystemContext::mouse.delta_y);
-	simpleTextRenderer->add_text_to_buffer(textBuilder.data(), 0.2f, glm::vec3(-1.5f, -0.2f, 0.f), glm::vec4(0.9f, 0.9f, 0.0f, 1.f), 0);
-	textBuilder.reset();
-	simpleTextRenderer->render_buffered_text(renderer);
-	////
+	simpleTextRenderer->render_buffered_text(renderer);*/
 
 	renderer->present();
 }
@@ -323,7 +320,7 @@ void EngineCore::init_Graphic_API() {
 		glfwSetWindowAspectRatio(window, 16, 9);
 		//glad
 		gladLoadGL();
-		glfwSwapInterval(0);
+		//glfwSwapInterval(0);
 	}
 	else if (render_api == RENDER_API::DirectX_API) {
 		//renderer = std::make_unique<DirectX_Renderer>();

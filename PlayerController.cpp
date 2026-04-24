@@ -58,15 +58,15 @@ void PlayerController::Update() {
 	//text control
 	if (SystemContext::keyBoard.key_is_pressed(Key1)) {
 		text->set_vert_align(TextVerticalAlignment::vertUp);
-		text->set_text("Up");
+		text->set_font(0);
 	}
 	if (SystemContext::keyBoard.key_is_pressed(Key2)) {
 		text->set_vert_align(TextVerticalAlignment::vertCenter);
-		text->set_text("Center");
+		text->set_font(1);
 	}
 	if (SystemContext::keyBoard.key_is_pressed(Key3)) {
 		text->set_vert_align(TextVerticalAlignment::vertBottom);
-		text->set_text("Bottom");
+		text->set_font(2);
 	}
 	if (SystemContext::keyBoard.key_is_pressed(Key4)) {
 		text->set_horiz_align(TextHorizontalAlignment::horizLeft);
@@ -76,6 +76,12 @@ void PlayerController::Update() {
 	}
 	if (SystemContext::keyBoard.key_is_pressed(Key6)) {
 		text->set_horiz_align(TextHorizontalAlignment::horizRight);
+	}
+	if (SystemContext::keyBoard.key_is_pressed(Key0)) {
+		text_transform->set_rotation(0.0f, 0.0f, 0.0f);
+	}
+	if (SystemContext::mouse.wheel_offset != 0) {
+		text_transform->rotate(false, false, true, SystemContext::mouse.wheel_offset * TimeManager::deltaTime * 50.f);
 	}
 
 	if (SystemContext::mouse.lb_is_pressed()) {
@@ -94,11 +100,13 @@ void PlayerController::Update() {
 void PlayerController::set_test_UI(
 	EUI::UI_Component_Ptr<EUI::Image>& img_ptr,
 	EUI::UI_Component_Ptr<EUI::Button>& button_ptr,
-	EUI::UI_Component_Ptr<EUI::SDF_Text>& text_ptr
+	EUI::UI_Component_Ptr<EUI::SDF_Text>& text_ptr,
+	EUI::UI_Component_Ptr<EUI::UI_Transform>& text_transform
 ) {
 	image = img_ptr;
 	button = button_ptr;
 	text = text_ptr;
+	this->text_transform = text_transform;
 	button->set_callback(&PlayerController::wrapper, this);
 }
 

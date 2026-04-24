@@ -53,7 +53,7 @@ void SimpleTextRenderer::setup_fonts() {
 }
 
 void SimpleTextRenderer::add_font(const char* fontPath, bool isSDF, std::string fontName) {
-	fontManager->add_font(fontPath, isSDF, fontName);
+	fontManager->add_font_old(fontPath, isSDF, fontName);
 }
 
 void SimpleTextRenderer::update_text(const char* text, float letter_height, glm::vec3 bottom_left_position, glm::vec4 text_color, uint32_t fontID) {
@@ -61,7 +61,7 @@ void SimpleTextRenderer::update_text(const char* text, float letter_height, glm:
 	float stride = 0;
 	text_size = size;
 	TextBasicVertex* ptr = text_buffer;
-	Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
+	/*Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
 	for (int i = 0; i < size; i++) {
 		Glyph& glyph = glyphs[int(text[i]) - 32];
 		ptr->pos = { bottom_left_position.x + stride, bottom_left_position.y, bottom_left_position.z };
@@ -82,7 +82,7 @@ void SimpleTextRenderer::update_text(const char* text, float letter_height, glm:
 		ptr++;
 
 		stride += letter_height * glyph.height_ratio;
-	}
+	}*/
 }
 
 void SimpleTextRenderer::add_text_to_buffer(const char* text, float letter_height, glm::vec3 bottom_left_position, glm::vec4 text_color, uint32_t fontID) {
@@ -91,7 +91,7 @@ void SimpleTextRenderer::add_text_to_buffer(const char* text, float letter_heigh
 	const int size = strlen(text);
 	float stride = 0;
 	text_size += size;
-	Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
+	/*Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
 	for (int i = 0; i < size; i++) {
 		Glyph& glyph = glyphs[int(text[i]) - 32];
 		ptr->pos = { bottom_left_position.x + stride, bottom_left_position.y, bottom_left_position.z };
@@ -112,14 +112,14 @@ void SimpleTextRenderer::add_text_to_buffer(const char* text, float letter_heigh
 		ptr++;
 
 		stride += letter_height * glyph.height_ratio;
-	}
+	}*/
 }
 
 void SimpleTextRenderer::update_centered_text(const char* text, float letter_height, glm::vec3 center_position, glm::vec4 text_color, uint32_t fontID) {
 	const int size = strlen(text);
 	float stride = 0;
 	text_size = size;
-	Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
+	/*Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
 	float totalWidth = 0.f;
 	for (int i = 0; i < size; i++) {
 		totalWidth += letter_height * glyphs[int(text[i]) - 32].height_ratio;
@@ -146,7 +146,7 @@ void SimpleTextRenderer::update_centered_text(const char* text, float letter_hei
 		ptr++;
 
 		stride += letter_height * glyph.height_ratio;
-	}
+	}*/
 }
 
 void SimpleTextRenderer::add_centered_text_to_buffer(const char* text, float letter_height, glm::vec3 center_position, glm::vec4 text_color, uint32_t fontID) {
@@ -156,7 +156,7 @@ void SimpleTextRenderer::add_centered_text_to_buffer(const char* text, float let
 	float stride = 0;
 	text_size += size;
 	float totalWidth = 0.f;
-	Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
+	/*Glyph* glyphs = fontManager->get_font(fontID)->glyph_coords;
 	for (int i = 0; i < size; i++) {
 		totalWidth += letter_height * glyphs[int(text[i]) - 32].height_ratio;
 	}
@@ -181,7 +181,7 @@ void SimpleTextRenderer::add_centered_text_to_buffer(const char* text, float let
 		ptr++;
 
 		stride += letter_height * glyph.height_ratio;
-	}
+	}*/
 }
 
 void SimpleTextRenderer::render_buffered_text(std::unique_ptr<Engine::Graphics::RendererInterface>& renderer) {

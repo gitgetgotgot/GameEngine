@@ -22,27 +22,25 @@ void main()
 	float glowSize = 0.3;                // радиус свечени€
 	float glowIntensity = 1.0;            // €ркость свечени€
 
-	float outlineWidth = 0.2f;
-	vec3 outlineColor = vec3(0.0, 0.0, 0.0);            //outline color
+	float outlineWidth = 0.3f;
+	vec3 outlineColor = vec3(0.0, 0.0, 0.0);
 	
 	vec2 shadowOffset = vec2(0.003, 0.003); // смещение тени
 	vec3 shadowColor = vec3(0.0, 0.0, 0.0);  // цвет тени
 	float shadowAlpha = 0.5;                 // прозрачность тени
 
 	float dist = texture(tex0, texCoords).r - 0.5f;
+	dist *= 0.8f;
 	float w = fwidth(dist);
-	float alpha = smoothstep(-w * thickness, w * thickness, dist + bias);
+	float fill = smoothstep(-w, w, dist);
+	float outlineMask = smoothstep(-w - outlineWidth, w - outlineWidth, dist);
 
-	
-	// контур: провер€ем диапазон вокруг границы
-	float outline = 1.0 - smoothstep(outlineWidth - w, outlineWidth + w, abs(dist + bias));
-	// итоговый цвет
-	vec3 finalColor = mix(outlineColor, textColor.rgb, alpha);
-	fragColor = vec4(finalColor, max(alpha, outline));
-	//fragColor = vec4(textColor.rgb, alpha);
+	// final color
+	vec3 color = mix(outlineColor, textColor.rgb, fill);
+	float alpha = max(fill, outlineMask);
+	fragColor = vec4(color, alpha);
 
 	/*
-
 	// тень (смещЄнные координаты)
     float sdfShadow = texture(tex0, texCoords + shadowOffset).r;
     float distShadow = sdfShadow - 0.5;

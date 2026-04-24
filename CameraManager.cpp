@@ -1,9 +1,15 @@
 #include "CameraManager.h"
+#include "InputHandler.h"
 
 void CameraManager::update_active_camera() {
 	if (active_camera) {
 		Engine::Component::Transform& tr = *active_camera_transform;
 		active_camera->viewMatrix = invertOrthonormal(tr.worldMatrix);
+		if (WindowResizeAccess::window_is_resized) {
+			WindowResizeAccess::window_is_resized = false;
+			std::cout << "Window is resized, Camera updated" << std::endl;
+			active_camera->set_perspective(0.1f, 100.0f);
+		}
 	}
 }
 

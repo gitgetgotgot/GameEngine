@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\TinyGLTF;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\stb;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\json;S:\Games\Visual Studio projects\SimpleGameEngine\Libraries\include;$(IncludePath)</IncludePath>
+    <IncludePath>S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\msdfgen;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\FreeType;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\TinyGLTF;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\stb;S:\games\Visual Studio projects\SimpleGameEngine\Libraries\include\json;S:\Games\Visual Studio projects\SimpleGameEngine\Libraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>S:\Games\Visual Studio projects\SimpleGameEngine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,7 +118,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
